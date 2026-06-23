@@ -1,0 +1,8 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+test_data/
+pipeline.log
+*.log
+.claude/

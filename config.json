@@ -1,0 +1,19 @@
+{
+  "kafka": {
+    "bootstrap_servers": "localhost:9092",
+    "topic": "update-client",
+    "group_id": "kedp-consumer-01",
+    "security_protocol": "PLAINTEXT",
+    "sasl_mechanism": "",
+    "sasl_username": "",
+    "sasl_password": ""
+  },
+  "paths": {
+    "json_ingestion_dir": "C:\\KafkaData\\Raw_JSON",
+    "excel_output_dir": "C:\\KafkaData\\Daily_Reports"
+  },
+  "log": {
+    "max_bytes": 5242880,
+    "backup_count": 3
+  }
+}
