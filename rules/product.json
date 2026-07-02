@@ -1,0 +1,1461 @@
+{
+  "step": "product",
+  "label": "Product",
+  "key_columns": [
+    "PCID"
+  ],
+  "output_columns": [
+    "productNew",
+    "subProduct"
+  ],
+  "chains": {
+    "productNew": {
+      "default": {
+        "productNew": {
+          "type": "column",
+          "column": "PCID"
+        }
+      },
+      "rules": [
+        {
+          "id": 1,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "AMT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 2,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "INS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 3,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "RNT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 4,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "SIC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 5,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TRN"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 6,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "WDT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 7,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "AAS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 8,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "DOC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 9,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "HTD"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 10,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "HTI"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 11,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TXD"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 12,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TXI"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 13,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "KIT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 14,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "LGS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "COMPONENT"
+            }
+          }
+        },
+        {
+          "id": 15,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "CRS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 16,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "FIT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 17,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "EUM"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 18,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MOS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 19,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "GIT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 20,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MTO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 21,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MTP"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 22,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TMR"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 23,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "EVO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 24,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "INC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 25,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "INH"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 26,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "EDU"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 27,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "UMF"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 28,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "UMO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "SPECIALIST"
+            }
+          }
+        },
+        {
+          "id": 29,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "APO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "OTHER"
+            }
+          }
+        },
+        {
+          "id": 30,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "FEE"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "OTHER"
+            }
+          }
+        },
+        {
+          "id": 31,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MSC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "OTHER"
+            }
+          }
+        },
+        {
+          "id": 32,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "VOA"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "OTHER"
+            }
+          }
+        },
+        {
+          "id": 33,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "JGA"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "OTHER"
+            }
+          }
+        },
+        {
+          "id": 34,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "LGS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "productNew": {
+              "type": "literal",
+              "value": "OTHER"
+            }
+          }
+        }
+      ]
+    },
+    "subProduct": {
+      "default": {
+        "subProduct": {
+          "type": "column",
+          "column": "PCID"
+        }
+      },
+      "rules": [
+        {
+          "id": 1,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "AMT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 2,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "INS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 3,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "RNT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 4,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "SIC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 5,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TRN"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 6,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "WDT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 7,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "KIT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 8,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "LGS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "AUXILIARY"
+            }
+          }
+        },
+        {
+          "id": 9,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "AAS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "DOCUMENT"
+            }
+          }
+        },
+        {
+          "id": 10,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "DOC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "DOCUMENT"
+            }
+          }
+        },
+        {
+          "id": 11,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "HTD"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "HOTEL DOMESTIC"
+            }
+          }
+        },
+        {
+          "id": 12,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "HTI"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "HOTEL INTERNATIONAL"
+            }
+          }
+        },
+        {
+          "id": 13,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TXD"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "TICKET DOMESTIC"
+            }
+          }
+        },
+        {
+          "id": 14,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TXI"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "TICKET INTERNATIONAL"
+            }
+          }
+        },
+        {
+          "id": 15,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "CRS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "FIT"
+            }
+          }
+        },
+        {
+          "id": 16,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "EUM"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "FIT"
+            }
+          }
+        },
+        {
+          "id": 17,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "FIT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "FIT"
+            }
+          }
+        },
+        {
+          "id": 18,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "UMF"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "FIT"
+            }
+          }
+        },
+        {
+          "id": 19,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "GIT"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "GIT"
+            }
+          }
+        },
+        {
+          "id": 20,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MOS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "GIT"
+            }
+          }
+        },
+        {
+          "id": 21,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "UMO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "GIT"
+            }
+          }
+        },
+        {
+          "id": 22,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MTO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "CORPORATE EVENT"
+            }
+          }
+        },
+        {
+          "id": 23,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MTP"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "CORPORATE EVENT"
+            }
+          }
+        },
+        {
+          "id": 24,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "TMR"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "GIT"
+            }
+          }
+        },
+        {
+          "id": 25,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "EVO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "INCENTIVE"
+            }
+          }
+        },
+        {
+          "id": 26,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "INC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "INCENTIVE"
+            }
+          }
+        },
+        {
+          "id": 27,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "INH"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "INHOUSE"
+            }
+          }
+        },
+        {
+          "id": 28,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "EDU"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "INCENTIVE"
+            }
+          }
+        },
+        {
+          "id": 29,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "APO"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "OTHER FEE"
+            }
+          }
+        },
+        {
+          "id": 30,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "FEE"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "OTHER FEE"
+            }
+          }
+        },
+        {
+          "id": 31,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "MSC"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "OTHER FEE"
+            }
+          }
+        },
+        {
+          "id": 32,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "VOA"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "OTHER FEE"
+            }
+          }
+        },
+        {
+          "id": 33,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "JGA"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "OTHER FEE"
+            }
+          }
+        },
+        {
+          "id": 34,
+          "condition": {
+            "any": [
+              [
+                {
+                  "column": "PCID",
+                  "operator": "=",
+                  "negate": false,
+                  "value": "LGS"
+                }
+              ]
+            ]
+          },
+          "result": {
+            "subProduct": {
+              "type": "literal",
+              "value": "OTHER FEE"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

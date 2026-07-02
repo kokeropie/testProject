@@ -1,0 +1,1152 @@
+{
+  "step": "subBusinessUnit",
+  "label": "Sub Business Unit",
+  "key_columns": [
+    "Divisi"
+  ],
+  "output_columns": [
+    "subBusinessUnit"
+  ],
+  "default": {
+    "subBusinessUnit": {
+      "type": "literal",
+      "value": "LEI"
+    }
+  },
+  "rules": [
+    {
+      "id": 1,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CC01"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CC02"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CC03"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CC04"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CC05"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "EME"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "MTE"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CSA"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CAM"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CSQ"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CTS"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "TVS"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "CTM"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "negate": false,
+              "value": "CIM*"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "CME"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OSA"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "ORN"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OOM"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OOM 1"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 19,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OOM 2"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OOM 3"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OOM 4"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 1"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 24,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 2"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 3"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 26,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 4"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 27,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 5"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 28,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 6"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 29,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 7"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 101"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 31,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 102"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 32,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 103"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 33,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 104"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 34,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 105"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 201"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 36,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 202"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 37,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 203"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 38,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 204"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 39,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 205"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 40,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OSP"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 41,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OBD1"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "INH"
+        }
+      }
+    },
+    {
+      "id": 42,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OBD2"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "INH"
+        }
+      }
+    },
+    {
+      "id": 43,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "INH"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "INH"
+        }
+      }
+    },
+    {
+      "id": 44,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OBD 1"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "INH"
+        }
+      }
+    },
+    {
+      "id": 45,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OBD 2"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "INH"
+        }
+      }
+    },
+    {
+      "id": 46,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 5"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 47,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OAM 6"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "ORN"
+        }
+      }
+    },
+    {
+      "id": 48,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "WSL"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "WSL"
+        }
+      }
+    },
+    {
+      "id": 49,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "ATI"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "OPS"
+        }
+      }
+    },
+    {
+      "id": 50,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "ATO"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "OPS"
+        }
+      }
+    },
+    {
+      "id": 51,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "VPS"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "OPS"
+        }
+      }
+    },
+    {
+      "id": 52,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "OPS"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "OPS"
+        }
+      }
+    },
+    {
+      "id": 53,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "SAB"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "WSL"
+        }
+      }
+    },
+    {
+      "id": 54,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "negate": false,
+              "value": "SIS"
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subBusinessUnit": {
+          "type": "literal",
+          "value": "WSL"
+        }
+      }
+    }
+  ]
+}

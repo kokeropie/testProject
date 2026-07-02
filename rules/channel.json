@@ -1,0 +1,4086 @@
+{
+  "step": "channel",
+  "label": "Channel",
+  "key_columns": [
+    "Divisi",
+    "ClientSegment",
+    "ClientName",
+    "InvoiceID"
+  ],
+  "output_columns": [
+    "Channels",
+    "subChannels"
+  ],
+  "default": null,
+  "rules": [
+    {
+      "id": 1,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "PTC",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "ONC",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "ONLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "ONLINE"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CCC",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MIM",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MKG",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "SDR",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "TBS",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC01",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC02",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC03",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC04",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC05",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC1",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC2",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC3",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC4",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CC5",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "EME",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MTE",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MEE",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "CORPORATE CONTACT CENTER"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "BDO",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "DPS",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "SUB",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "UPG",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MDN",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "OUTSIDE JAKARTA BRANCH"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "InvoiceID",
+              "operator": "=",
+              "value": "445-0001236.0",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "InvoiceID",
+              "operator": "=",
+              "value": "445-0001238.0",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ACC",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "HK*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "CIM*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "OAM*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ANA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BDO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BOP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ASP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM8",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM12",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM13",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CME",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DPS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EME",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FOP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FRV",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FSD",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FXM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OHD",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ONC",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ORN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OSA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "RCC",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "RHO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SUB",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MDN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "THO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UPG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "WSL",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BSM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC03",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC04",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC05",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CCC",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FBD",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FPO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "LTM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "TBS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MIM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MKG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PTC",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SDR",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "TTS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ATI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ATO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OSP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FBO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "AGP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "VPS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "KEI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ASP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MEE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MTE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FSL",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OPS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM101",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM102",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM103",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM104",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM105",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM201",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM202",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM203",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM204",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM205",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "JAKARTA BRANCH"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "KEI",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "JAP",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "THO",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "GIS",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MOS",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MOS01",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "MOS02",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "UMO",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "TMR",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "VVIP",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "UMO01",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "UMO02",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "DOS01",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "DOS02",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "FIS",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "RHO",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "RCC",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OHD",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CRU",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CRU01",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CRU02",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "FIT",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "SPECIALIST BRANCH"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "ASP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "SPECIALIST BRANCH"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "CIM*",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM1",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM2",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM3",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM4",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM5",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM6",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM7",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM8",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM9",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM10",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM11",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM12",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CIM13",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OOM",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OOM 1",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OOM 2",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OOM 3",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OOM 4",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM 1",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM 2",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM 3",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM 4",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "ORN",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OSA",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CME",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OSP",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM 5",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM 6",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM 7",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM101",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM102",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM103",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM104",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM105",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM201",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM202",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM203",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM204",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OAM205",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "ORANGE"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "INH",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OBD1",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OBD2",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "INHOUSE"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "HK*",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "JAKARTA BRANCH"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "PAG",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "PANORAMA AGENT"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "FSL",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "RT",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "OFFLINE"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "JAKARTA BRANCH"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "HK*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "CIM*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM8",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM9",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM10",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM11",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM12",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM13",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MPM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "TEZ",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ORN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OSA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CME",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BDO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DPS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SUB",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MDN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "TBS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UPG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "KEI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "THO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MEE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM101",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM102",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM103",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM104",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM105",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM201",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM202",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM203",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM204",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM205",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "FBD",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "FBO",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "FRANCHISE AND LICENSING"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "AGP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "like",
+              "value": "*TUREZ*",
+              "negate": true
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "ATI",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "like",
+              "value": "*TUREZ*",
+              "negate": true
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "ATO",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "like",
+              "value": "*TUREZ*",
+              "negate": true
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "BSM",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "like",
+              "value": "*TUREZ*",
+              "negate": true
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "LTM",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "like",
+              "value": "*TUREZ*",
+              "negate": true
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "VPS",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "like",
+              "value": "*TUREZ*",
+              "negate": true
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OPS",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "like",
+              "value": "*TUREZ*",
+              "negate": true
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "OPERATION SUPPORT"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "CIM*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM8",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM9",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM10",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM11",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM12",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM13",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ORN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OSA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CME",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BDO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DPS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SUB",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MDN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UPG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MEE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM205",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "KEI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "THO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM101",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM102",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM103",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM104",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM105",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM201",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM202",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM203",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM204",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "BUSINESS ONLINE PARTNER"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "CIM*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM8",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM9",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM10",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM11",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM12",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM13",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ORN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OSA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CME",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BDO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DPS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SUB",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MDN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UPG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "KEI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "THO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BGR",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC05",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EMP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FBO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GRI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MEE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM205",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "KGD",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MPM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PCP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PRI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "RHO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SMB",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "TEZ",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "HOT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM101",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM102",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM103",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM104",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM105",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM201",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM202",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM203",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM204",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "like",
+              "value": "CIM*",
+              "negate": true
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM7",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM8",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM9",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM10",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM11",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM12",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CIM13",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OOM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 3",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 4",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 5",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM 6",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "ORN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OSA",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CME",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BDO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DPS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SUB",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MDN",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UPG",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EUM02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "UMO02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "DOS02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "KEI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "THO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "BGR",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CC05",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "EMP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "FBO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GRI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MEE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM205",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "KGD",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "MPM",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PCP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PRI",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "RHO",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "SMB",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "TEZ",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "HOT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM101",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM102",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM103",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM104",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM105",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM201",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM202",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM203",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OAM204",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "WHOLESALE"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "RT",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OPS",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "WHOLESALE"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "WSL",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "DRP",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "SAB",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "SIS",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "WHOLESALE"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "VPS",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "RT",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "WHOLESALE"
+        }
+      }
+    },
+    {
+      "id": 19,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "InvoiceID",
+              "operator": "=",
+              "value": "601-0015610.0",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Channels": {
+          "type": "literal",
+          "value": "NETWORK"
+        },
+        "subChannels": {
+          "type": "literal",
+          "value": "WHOLESALE"
+        }
+      }
+    }
+  ]
+}

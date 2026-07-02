@@ -1,0 +1,203 @@
+{
+  "step": "reportDate",
+  "label": "Report Date",
+  "key_columns": [
+    "productNew",
+    "Voided",
+    "DateOfCreated",
+    "VoidDate",
+    "DATEOFSERVICESTART"
+  ],
+  "output_columns": [
+    "reportDate"
+  ],
+  "default": null,
+  "rules": [
+    {
+      "id": 1,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "productNew",
+              "operator": "<>",
+              "value": "SPECIALIST",
+              "negate": false
+            },
+            {
+              "column": "Voided",
+              "operator": "=",
+              "value": 0,
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "reportDate": {
+          "type": "column",
+          "column": "DateOfCreated"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "productNew",
+              "operator": "<>",
+              "value": "SPECIALIST",
+              "negate": false
+            },
+            {
+              "column": "Voided",
+              "operator": "=",
+              "value": 1,
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "reportDate": {
+          "type": "column",
+          "column": "VoidDate"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "productNew",
+              "operator": "=",
+              "value": "SPECIALIST",
+              "negate": false
+            },
+            {
+              "column": "Voided",
+              "operator": "=",
+              "value": 0,
+              "negate": false
+            },
+            {
+              "column": "DateOfCreated",
+              "operator": ">",
+              "value_column": "DATEOFSERVICESTART",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "reportDate": {
+          "type": "column",
+          "column": "DateOfCreated"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "productNew",
+              "operator": "=",
+              "value": "SPECIALIST",
+              "negate": false
+            },
+            {
+              "column": "Voided",
+              "operator": "=",
+              "value": 0,
+              "negate": false
+            },
+            {
+              "column": "DateOfCreated",
+              "operator": "<=",
+              "value_column": "DATEOFSERVICESTART",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "reportDate": {
+          "type": "column",
+          "column": "DATEOFSERVICESTART"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "productNew",
+              "operator": "=",
+              "value": "SPECIALIST",
+              "negate": false
+            },
+            {
+              "column": "Voided",
+              "operator": "=",
+              "value": 1,
+              "negate": false
+            },
+            {
+              "column": "VoidDate",
+              "operator": ">",
+              "value_column": "DATEOFSERVICESTART",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "reportDate": {
+          "type": "column",
+          "column": "VoidDate"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "productNew",
+              "operator": "=",
+              "value": "SPECIALIST",
+              "negate": false
+            },
+            {
+              "column": "Voided",
+              "operator": "=",
+              "value": 1,
+              "negate": false
+            },
+            {
+              "column": "VoidDate",
+              "operator": "<=",
+              "value_column": "DATEOFSERVICESTART",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "reportDate": {
+          "type": "column",
+          "column": "DATEOFSERVICESTART"
+        }
+      }
+    }
+  ]
+}

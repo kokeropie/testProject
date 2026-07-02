@@ -1,0 +1,23 @@
+{
+  "voided_column": "Voided",
+  "voided_nonzero_encoding": true,
+  "voided_literal_in_rules": 1,
+  "negation_columns": [
+    "ADDFEE",
+    "AGENTCHARGE",
+    "NETFARE",
+    "NIGHTS",
+    "ORGAMT",
+    "RealNETFARE",
+    "RealTAX",
+    "SUBTOTAL",
+    "SUBTOTALORG",
+    "TAX",
+    "VAT"
+  ],
+  "void_status_active_value": "all",
+  "void_status_void_value": "void",
+  "column_aliases": {
+    "subChannels2": "subChannels"
+  }
+}

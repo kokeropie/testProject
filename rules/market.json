@@ -1,0 +1,919 @@
+{
+  "step": "market",
+  "label": "Market",
+  "key_columns": [
+    "Divisi",
+    "ClientSegment",
+    "ClientName",
+    "InvoiceID",
+    "subProduct",
+    "subChannels"
+  ],
+  "output_columns": [
+    "Market",
+    "subMarket"
+  ],
+  "default": null,
+  "rules": [
+    {
+      "id": 1,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "AGENTS"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "FRANCHISE AND LICENSING"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU02",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "ClientName",
+              "operator": "=",
+              "value": "MG GROUP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU02",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "AGENTS"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "SISTER COMPANY"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "ClientName",
+              "operator": "<>",
+              "value": "MG GROUP",
+              "negate": false
+            },
+            {
+              "column": "InvoiceID",
+              "operator": "<>",
+              "value": "445-0001236.0",
+              "negate": false
+            },
+            {
+              "column": "InvoiceID",
+              "operator": "<>",
+              "value": "445-0001238.0",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "JAP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU01",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "CRU02",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "AGENTS"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "SUB AGENT"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "BP",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "AGENTS"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "BUSINESS ONLINE PARTNER"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subProduct",
+              "operator": "=",
+              "value": "INCENTIVE",
+              "negate": false
+            },
+            {
+              "column": "subChannels2",
+              "operator": "=",
+              "value": "ORANGE",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "CORPORATE"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "CORPORATE INCENTIVE"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OBD1",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OBD 1",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OBD2",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "OBD 2",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "INH",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "INHOUSE"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "INHOUSE"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subChannels2",
+              "operator": "=",
+              "value": "ORANGE",
+              "negate": false
+            },
+            {
+              "column": "subProduct",
+              "operator": "<>",
+              "value": "INCENTIVE",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "GIS",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "CORPORATE"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "CORPORATE INCENTIVE"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "clientSegment",
+              "operator": "=",
+              "value": "CA",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "subProduct",
+              "operator": "=",
+              "value": "CORPORATE EVENT",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "CORPORATE"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "CORPORATE TRAVEL"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subChannels2",
+              "operator": "<>",
+              "value": "ORANGE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "subProduct",
+              "operator": "=",
+              "value": "GIT",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "LEISURE"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "LEISURE GROUP"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subProduct",
+              "operator": "=",
+              "value": "INCENTIVE",
+              "negate": false
+            },
+            {
+              "column": "subChannels2",
+              "operator": "<>",
+              "value": "ORANGE",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "LEISURE"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "LEISURE GROUP"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "JAP",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CRU",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CRU01",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "CRU02",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "InvoiceID",
+              "operator": "=",
+              "value": "445-0001236.0",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "InvoiceID",
+              "operator": "=",
+              "value": "445-0001238.0",
+              "negate": false
+            }
+          ],
+          [
+            {
+              "column": "subChannels2",
+              "operator": "<>",
+              "value": "ORANGE",
+              "negate": false
+            },
+            {
+              "column": "subProduct",
+              "operator": "<>",
+              "value": "INCENTIVE",
+              "negate": false
+            },
+            {
+              "column": "subProduct",
+              "operator": "<>",
+              "value": "GIT",
+              "negate": false
+            },
+            {
+              "column": "subProduct",
+              "operator": "<>",
+              "value": "CORPORATE EVENT",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "PW",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SC",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "SA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "clientSegment",
+              "operator": "<>",
+              "value": "BP",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 1",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "OBD 2",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "INH",
+              "negate": false
+            },
+            {
+              "column": "Divisi",
+              "operator": "<>",
+              "value": "PAG",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "LEISURE"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "LEISURE INDIVIDUAL"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "Divisi",
+              "operator": "=",
+              "value": "PAG",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "Market": {
+          "type": "literal",
+          "value": "AGENTS"
+        },
+        "subMarket": {
+          "type": "literal",
+          "value": "PANORAMA AGENT"
+        }
+      }
+    }
+  ]
+}

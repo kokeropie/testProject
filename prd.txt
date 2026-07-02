@@ -1,0 +1,224 @@
+PRD — Transform Stage: original.xlsx -> output.xlsx (+ active/void split)
+============================================================
+Status: Draft
+Source of truth for business rules: process.txt (this run's log) + dataFilter/*.txt (Qlik rule scripts)
+
+1. PROBLEM
+----------
+KEDP today stops at compiler.py: Kafka JSON -> Compiled_Report_YYYY-MM-DD.xlsx
+(alphabetical columns, no business enrichment). Getting from that raw export
+to a report-ready workbook — the businessUnit/product/channel/market/reportDate
+enrichment and the active/void split — is currently a manual, undocumented
+process. process.txt is the first write-up of what that process actually does,
+because it was walked through by hand against dataFilter/*.txt (Qlik-style
+If()/LOAD-WHERE rule files) on rawData/original.xlsx.
+
+This PRD turns that manual process into a spec for an automated pipeline stage
+so it runs the same way every time, without a human re-deriving the rules.
+
+2. GOALS
+--------
+- Given rawData/original.xlsx (or any CSV/XLS/XLSX input with the same
+  122-column schema), reproduce output/output.xlsx, output/output_active.xlsx,
+  output/output_void.xlsx, and output/output_all.xlsx exactly as defined in
+  process.txt, deterministically — regardless of which input format was used.
+- Encode the 5 dataFilter/*.txt rule files (businessUnit, subBusinessUnit,
+  product, channel, market, reportDate — mgmtRpt.txt is out of scope, see 6)
+  as an ordered, first-match-wins rule engine, not one-off pandas code per file.
+- Preserve step ordering and cross-step dependencies (Step 4 needs Step 2+3
+  output; Step 5 needs Step 2 output) so re-running never silently reorders.
+- Make the two "-1 vs 1" Voided-encoding decisions (Step 5, Step 6) explicit,
+  configurable, and logged — not a silent hardcoded assumption buried in code.
+
+3. NON-GOALS
+------------
+- Not building a UI for editing rules — dataFilter/*.txt stay the source of
+  business logic; this stage only needs to parse and apply them.
+- Not validating or fixing the Qlik rule files themselves.
+- Not wiring this into consumer.py/compiler.py's scheduled run in this PRD —
+  output of compiler.py (Compiled_Report_*.xlsx) becoming the transform's
+  input is a follow-up integration decision (open question, see 8).
+- mgmtRpt.txt is not part of this transform (no step in process.txt uses it)
+  — excluded until someone specifies what it's for.
+
+4. INPUT / OUTPUT CONTRACT
+---------------------------
+Input:  one file in .csv, .xls, or .xlsx format, 122 columns, must include
+        at minimum: Divisi, PCID, ClientSegment, ClientName, InvoiceID,
+        Voided, DateOfCreated, VoidDate, DATEOFSERVICESTART
+        (columns consumed by the 5 rule files + Step 6 negation list)
+  - Format is detected from file extension, not assumed. .xls (legacy
+    binary) and .xlsx (OOXML) require different pandas/openpyxl engines
+    (xlrd vs openpyxl) — the reader must pick the right one, not hardcode
+    read_excel(engine="openpyxl") and fail on .xls input.
+  - .csv input has no dtype/format metadata the way Excel does — dates
+    (DateOfCreated, VoidDate, DATEOFSERVICESTART) and numeric columns
+    (the 11 Step 6 negation columns, plus any column a rule condition
+    compares numerically) must be explicitly parsed/coerced after load,
+    since pandas' CSV type inference is not guaranteed to match how the
+    same column would be typed when read from Excel. A row that fails
+    coercion should be logged and flagged, not silently become NaN/object.
+  - Whichever format the input is, the rule engine (5.1) and every step
+    downstream operate on the same in-memory DataFrame — no format-specific
+    branching past the initial read.
+  - Output format is unaffected by input format: outputs are always .xlsx,
+    per the contract below.
+
+Outputs (all under output/):
+  output.xlsx         589 rows x 131 cols  = input + 9 derived columns
+  output_active.xlsx  589 rows x 132 cols  = output.xlsx + voidStatus="all"
+  output_void.xlsx      3 rows x 132 cols  = Voided<>0 subset + voidStatus="void"
+                                              + 11 monetary cols negated
+  output_all.xlsx     592 rows x 132 cols  = output_active.xlsx UNION output_void.xlsx
+                                              (union, not deduped — void rows
+                                              legitimately appear twice)
+
+Row/column counts above are what this specific 589-row input produced and
+should be treated as the acceptance-test fixture, not a hardcoded expectation
+for all future inputs.
+
+5. FUNCTIONAL REQUIREMENTS
+---------------------------
+
+5.1 Rule engine (shared by all 5 rule-derived steps)
+  - Parse each dataFilter/*.txt into an ordered list of (condition, value)
+    rules; apply first-match-wins per row.
+  - Must support two source dialects found in dataFilter/:
+    (a) nested If(col = 'X', 'Y', If(...)) chains  [businessUnit,
+        subBusinessUnit, product, reportDate]
+    (b) LOAD/Concatenate blocks, each an independent WHERE-style condition
+        with its own static output values, evaluated in file order
+        [channel, market]
+  - Condition operators to support: =, <>, like (wildcard), and, or, as seen
+    in channel.txt/market.txt.
+  - reportDate's rules resolve to *other columns' values*, not literals —
+    engine must support "return column X" as a rule outcome, not just
+    "return literal Y".
+
+5.2 Step 1 — businessUnit, subBusinessUnit
+  - Key: Divisi. Two independent rule files, applied in parallel (not
+    dependent on each other or any other step).
+  - Default when no rule matches: 'LEI' for both columns (subBusinessUnit's
+    file default is 'DIS' on disk — override to 'LEI' per business request;
+    this override must be a visible config value, not a silent patch).
+  - businessUnit.txt is missing an explicit WSL rule; subBusinessUnit.txt has
+    one. Engine config must inject WSL -> WSL into businessUnit's rule list
+    so the two columns agree — document this as a known source-file gap.
+
+5.3 Step 2 — productNew, subProduct
+  - Key: PCID. Single file, two independent If-chains.
+  - Default when no rule matches: passthrough of the raw PCID value (not a
+    literal). No rows in the reference dataset hit this path — engine must
+    still implement it, not assume full coverage on new data.
+
+5.4 Step 3 — Channels, subChannels
+  - Keys: Divisi, ClientSegment, ClientName, InvoiceID.
+  - 19-block partition, no default. If a future input row matches zero
+    blocks, this must be a hard failure (or explicit flagged-row output),
+    not a silent null — the reference dataset assumes 100% coverage and
+    process.txt gives no fallback behavior.
+  - Must run independently of Step 2 (no shared keys) but before Step 4.
+
+5.5 Step 4 — Market, subMarket
+  - Keys: Divisi, ClientSegment, ClientName, InvoiceID, plus subProduct
+    (Step 2 output) and subChannels (Step 3 output).
+  - Hard dependency: must execute after Steps 2 and 3 complete.
+  - 12-block partition, no default — same zero-match handling as 5.4.
+
+5.6 Step 5 — reportDate
+  - Keys: productNew (Step 2 output), Voided, DateOfCreated, VoidDate,
+    DATEOFSERVICESTART.
+  - Hard dependency: must execute after Step 2.
+  - Logic: non-SPECIALIST rows -> DateOfCreated, or VoidDate if voided.
+    SPECIALIST rows -> DateOfCreated/VoidDate only if later than
+    DATEOFSERVICESTART, else DATEOFSERVICESTART.
+  - Voided-flag encoding: rule file's literal condition is "Voided = 1";
+    this dataset encodes voided as Voided = -1. Engine must treat the
+    condition as "Voided <> 0", configurable per-dataset (do not hardcode
+    -1 — some future input may genuinely use 1). Log which encoding was
+    detected/used per run.
+  - 6 conditions are meant to be exhaustive; a row that matches none should
+    be flagged, not silently left null.
+
+5.7 Step 6 — active/void split
+  - output_active.xlsx: full copy of output.xlsx + voidStatus="all" on
+    every row.
+  - output_void.xlsx: rows where Voided <> 0 (same encoding caveat as 5.6 —
+    a literal "Voided = 1" filter must not silently return 0 rows without
+    a warning) + voidStatus="void", then negate (multiply by -1) exactly
+    these 11 columns: ADDFEE, AGENTCHARGE, NETFARE, NIGHTS, ORGAMT,
+    RealNETFARE, RealTAX, SUBTOTAL, SUBTOTALORG, TAX, VAT.
+  - Negation column list must be config, not inline-hardcoded, since it's
+    a business decision independent of the rule files.
+
+5.8 Step 7 — output_all.xlsx
+  - Row-concatenation of output_active.xlsx + output_void.xlsx. No column
+    realignment logic needed since Step 6 guarantees identical schemas —
+    but engine should assert schema equality before concatenating rather
+    than trusting that invariant silently.
+  - Must not deduplicate. Voided rows appearing twice (once "all", once
+    "void") is expected output, not a bug — this needs a one-line comment
+    in code and a note in any user-facing docs so nobody "fixes" it later.
+
+6. DATA QUALITY / VALIDATION REQUIREMENTS
+------------------------------------------
+- Row count in must equal row count out for output.xlsx (Steps 1-5 only add
+  columns, never drop/add rows).
+- Per-step match-rate logging: how many rows hit each rule vs. the default/
+  no-match path, in the same style as the "Result counts" tables in
+  process.txt — this becomes the run's audit trail.
+- Zero-match rows on Steps 3/4 (no-default partitions) must be surfaced
+  (log + optionally written to an errors/unmatched output), not dropped.
+- Voided-encoding detection (Step 5, Step 6) must log which convention
+  (literal 1, or <>0) was applied.
+
+7. NON-FUNCTIONAL REQUIREMENTS
+-------------------------------
+- Deterministic: same input file -> byte-identical row/column output every
+  run (no reliance on dict ordering, wall-clock time, etc. inside rule
+  application).
+- Runs as a standalone script/stage consistent with the existing
+  consumer.py / compiler.py split in this repo (config-driven via
+  config.json, logs to pipeline.log via utils.setup_logging) — see open
+  question in 8 on whether it chains directly off compiler.py's output.
+  Uses openpyxl as compiler.py does for .xlsx; .xls support needs xlrd
+  added to requirements.txt (new dependency, currently absent from repo).
+- Performance target: 589 rows should complete in well under 10s
+  (compiler.py's daily compile of ~850 files is used as the rough
+  performance baseline for this pipeline).
+
+8. OPEN QUESTIONS
+------------------
+- Does this stage read compiler.py's Compiled_Report_YYYY-MM-DD.xlsx
+  directly, or does rawData/original.xlsx come from a separate manual
+  export? Determines whether this becomes Task-Scheduler-chained after
+  compiler.py or stays a manual/on-demand script.
+- Should Step 3/4 zero-match rows hard-fail the run or just get flagged and
+  passed through with nulls? process.txt's reference data never exercised
+  this path, so there's no precedent to follow.
+- Is the businessUnit.txt missing-WSL-rule gap something to fix at the
+  source (edit dataFilter/businessUnit.txt) instead of patching around it
+  in the engine config? Cheaper long-term but changes a file someone else
+  may own.
+- Retention/versioning for output/*.xlsx — overwrite each run, or
+  timestamp like compiler.py's Compiled_Report_YYYY-MM-DD.xlsx?
+- Do real .csv/.xls inputs actually exist yet, or is this format support
+  speculative ahead of a concrete source? Affects how much effort goes into
+  dtype-coercion edge cases (4) vs. shipping .xlsx-only first and adding
+  csv/xls readers when a real file surfaces.
+
+9. ACCEPTANCE CRITERIA
+------------------------
+- Running the transform against rawData/original.xlsx reproduces the exact
+  row/column counts and per-rule "Result counts" tables listed in
+  process.txt for all 4 output files.
+- All 9 derived columns present in output.xlsx, in the order listed in
+  process.txt Steps 1-5.
+- output_void.xlsx contains exactly the 3 voided rows with the 11 listed
+  columns negated and the other 121 columns unchanged from their
+  output_active.xlsx values.
+- output_all.xlsx row count = output_active.xlsx + output_void.xlsx
+  (592 = 589 + 3), confirming union rather than dedup.
+- The above holds regardless of whether rawData/original.xlsx is supplied
+  as .xlsx, re-saved as .xls, or exported to .csv — same input rows, same
+  4 output files, byte-for-byte identical results across all three formats.
