@@ -2,9 +2,9 @@ PROCESS LOG — rawData/original.xlsx -> output/output.xlsx
 ============================================================
 
 Source: rawData/original.xlsx (589 rows, 122 columns)
-Output: output/output.xlsx    (589 rows, 130 columns)
+Output: output/output.xlsx    (589 rows, 131 columns)
 
-8 columns were added, in this order, each derived from a rule file in
+9 columns were added, in this order, each derived from a rule file in
 dataFilter/. Rule files are Qlik-style nested If()/LOAD-WHERE scripts;
 each was parsed into an ordered list of (condition, value) rules and
 applied to every row (first matching rule wins).
@@ -100,11 +100,35 @@ Result counts (Market / subMarket):
   AGENTS    / SISTER COMPANY      (15 rows)
 
 
+STEP 5 — reportDate
+----------------------------------------
+Source column: dataFilter/reportDate.txt (flat If/then/else chain, not
+                nested — 6 sequential conditions, each returning another
+                column's value rather than a literal)
+Keyed on:       productNew (Step 2), Voided, DateOfCreated, VoidDate,
+                DATEOFSERVICESTART — must run AFTER Step 2 (needs
+                productNew)
+Logic:          non-SPECIALIST rows use DateOfCreated (or VoidDate if
+                voided); SPECIALIST rows use DateOfCreated/VoidDate only
+                if it's later than DATEOFSERVICESTART, otherwise they use
+                DATEOFSERVICESTART itself
+Assumption:     the rule file compares "Voided = 1" for the voided case,
+                but this dataset encodes voided rows as Voided = -1 (a
+                legacy true/false convention), not 1. Treated "Voided = 1"
+                as "Voided <> 0" so the voided branch still fires
+                correctly — confirmed against the 3 voided rows, which
+                all correctly picked up VoidDate as reportDate.
+Default:        none — the 6 conditions are exhaustive over
+                (productNew = SPECIALIST or not) x (voided or not) x
+                (date-vs-DATEOFSERVICESTART); 0 nulls in this dataset.
+
+
 FINAL OUTPUT
 ----------------------------------------
-output/output.xlsx — 589 rows x 130 columns
+output/output.xlsx — 589 rows x 131 columns
   = 122 original columns
   + businessUnit, subBusinessUnit   (Step 1)
   + productNew, subProduct          (Step 2)
   + Channels, subChannels           (Step 3)
   + Market, subMarket               (Step 4)
+  + reportDate                      (Step 5)
