@@ -4,73 +4,87 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-A web-based ETL tool built for personal + work use at a travel company in Jakarta. It reads data from multiple sources (MSSQL, CSV, Excel, Kafka), lets the user transform it, and outputs to CSV download or a database write. Built with Python — no frontend skills required.
+Two independent pipelines in one repo, sharing nothing but Python + this checkout:
 
-The Kafka source is the work-critical path: consuming `update-client` events from iCore Studio's internal event messaging system and loading them to MSSQL.
+1. **KEDP ingest/compile** (`consumer.py`, `compiler.py`, `utils.py`) — Kafka JSON messages -> daily `Compiled_Report_YYYY-MM-DD.xlsx`. Documented in `README.md`.
+2. **Transform stage + Streamlit app** (`pipeline.py`, `rules_engine.py`, `rule_importer.py`, `app.py`, `scheduler.py`, `path_picker.py`) — takes a raw export (originally a manual, undocumented Qlik process) and derives 10 business columns via a first-match-wins rule engine, splits active/void, and produces 4 report-ready workbooks. Has a Streamlit UI for editing the rules, running the transform, and scheduling unattended runs via Windows Task Scheduler.
 
-Full project context is in the Obsidian vault at `~/Library/Mobile Documents/iCloud~md~obsidian/Documents/aiaidede_vault/wiki/entities/my-app.md`.
+**`spec.txt` is the current, authoritative spec for the transform stage + app.** `prd.txt` (original PRD) and `process.txt` (log of one reference run) predate the rule-editor GUI and the Schedule feature — treat them as historical design notes where they disagree with `spec.txt`.
 
 ## Stack
 
 | Layer | Library |
 | --- | --- |
-| Web UI | Streamlit |
+| Web UI | Streamlit (`app.py`) |
 | Data transform | pandas |
-| MSSQL connection | SQLAlchemy + pyodbc |
-| Excel reading | openpyxl (pandas uses it automatically) |
-| Kafka consumer | `confluent-kafka` (preferred) or `kafka-python` |
+| Excel I/O | openpyxl (`.xlsx`), xlrd (`.xls`) |
+| Kafka consumer | `confluent-kafka` |
+| Scheduling | Windows Task Scheduler (`schtasks`), via a generated `.bat` |
+
+No database layer exists in this repo (no MSSQL/SQLAlchemy) — outputs are always `.xlsx` files.
 
 ## Setup
 
 ```bash
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
 ## Running
 
 ```bash
-streamlit run app.py
+streamlit run app.py                          # Transform stage UI (rule editor, Run Pipeline, Schedule)
+python pipeline.py <input.xlsx> --outdir DIR   # Transform stage, no UI
+python consumer.py                             # KEDP: Kafka -> JSON files (always-on)
+python compiler.py                             # KEDP: JSON files -> daily compiled report (one-shot)
 ```
 
 ## Architecture
 
 ```text
-app.py                   # Streamlit entry point — UI + routing only
-src/
-  extract/
-    csv_reader.py        # pd.read_csv wrapper
-    excel_reader.py      # pd.read_excel wrapper
-    mssql_reader.py      # SQLAlchemy connection + query → DataFrame
-    kafka_consumer.py    # consume update-client topic → DataFrame
-  transform/
-    pipeline.py          # filter, select columns, rename — operates on DataFrames
-  load/
-    csv_writer.py        # st.download_button helper
-    db_writer.py         # DataFrame → MSSQL via SQLAlchemy
+consumer.py / compiler.py / utils.py   KEDP ingest + compile (see README.md)
+
+pipeline.py                            Transform stage: 8-step derivation + CLI entry point,
+                                        write_excel_overwrite() (force-overwrite on every write)
+rules_engine.py                        Shared rule model (canonical DNF) + evaluator
+rule_importer.py                       One-time parser: dataFilter/*.txt -> rules/*.json
+                                        (re-running it overwrites rules/*.json, discarding
+                                        any edits made through the app — see its docstring)
+app.py                                 Streamlit UI: one rule-editor page per derived step,
+                                        Run Pipeline, Schedule, Config
+scheduler.py                           Schedule config I/O + schtasks/.bat generation
+path_picker.py                         Cross-platform (macOS/Windows) file/folder browser
+                                        widget used by the Schedule page
+build_mgmt_report.py                   One-off script: adds mgmtRpt to an existing output_all.xlsx
+
+dataFilter/*.txt                       Original Qlik-style rule scripts (nested If()/LOAD-WHERE) —
+                                        source of the business logic, gitignored
+rules/*.json                           Canonical rule storage pipeline.py actually reads at run
+                                        time; editable live via app.py's rule-editor pages
+rawData/, output/                      Sample input / generated output — gitignored
 ```
 
-`app.py` never imports pandas directly — it only calls `src/` modules and hands DataFrames to Streamlit (`st.dataframe`, `st.download_button`). Business logic lives in `src/`.
+`app.py` never imports pandas directly — it only calls `pipeline.py` and hands DataFrames to Streamlit (`st.dataframe`, `st.download_button`).
 
-## Kafka specifics
+## Rule engine
+
+Which `businessUnit`/`productNew`/`Channels`/`Market`/`reportDate`/`mgmtRpt` a row gets is decided by first-match-wins conditions stored in `rules/*.json` (canonical DNF — see `spec.txt` section 4), not hardcoded in Python. Edit rules through the Streamlit rule editor, not by hand-editing `dataFilter/*.txt` or `rules/*.json` directly — `rule_importer.py` is a one-time importer, not something to re-run casually.
+
+## Output files
+
+`output.xlsx` / `output_active.xlsx` / `output_void.xlsx` / `output_all.xlsx` — see `spec.txt` sections 3 and 5 for the full 8-step derivation and reference row/column counts. Every write goes through `pipeline.write_excel_overwrite()`: an existing file at the target path is deleted before writing, so a re-run always fully replaces stale output — never merges, never silently fails on a locked-open file.
+
+## Kafka specifics (KEDP ingest only — unrelated to the transform stage)
 
 - Topic: `update-client` (prod) / `update-client-dev` (dev)
-- Payload is JSON; `updated_date` field is the incremental watermark
-- Use `enable.auto.commit=False` — commit offset only after the row is written to MSSQL
-- `group.id` must be stable across restarts so Kafka tracks your consumer position
+- `consumer.py` commits the Kafka offset only after the JSON file is flushed to disk — no data loss on crash
+- `group.id` must stay stable across restarts so Kafka tracks consumer position
 
-## Build phases
+## Scheduling
 
-- [ ] Phase 1: CSV → display → download
-- [ ] Phase 2: Excel → display → download
-- [ ] Phase 3: MSSQL → query → display
-- [ ] Phase 4: Write results back to DB
-- [ ] Phase 5: Transform UI (filter, select columns, rename)
-- [ ] Phase 6: Kafka `update-client` → transform → load to MSSQL
+The Schedule page in `app.py` configures a recurring `pipeline.py` run (daily/weekly/monthly/annually, with a start date and an optional end date) and generates `register_scheduled_pipeline_task.bat` — same `schtasks`-based pattern as `register_compiler_task.bat`/`register_consumer_task.bat`. Streamlit has no background job runner, so activating the schedule still requires manually running that `.bat` as Administrator on the Windows host.
 
-## Open questions (decide before Phase 6)
+## Open questions
 
-- Kafka consumer: daemon (always running) vs on-demand trigger from UI?
-- Where does the app get hosted — local only, or cloud?
-- Which MSSQL table does `update-client` load into?
+See `spec.txt` section 10 (e.g. whether the transform stage should read `compiler.py`'s output directly, and how zero-match rows on no-default rule partitions should be handled).

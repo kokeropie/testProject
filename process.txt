@@ -1,5 +1,9 @@
 PROCESS LOG — rawData/original.xlsx -> output/output.xlsx
 ============================================================
+Note: this is a log of one specific reference run, kept for its exact
+per-rule "Result counts" (used as the acceptance-test fixture). For the
+current, full spec of the app — the rule engine, the Streamlit UI,
+scheduling, and force-overwrite write behavior — see spec.txt.
 
 Source: rawData/original.xlsx (589 rows, 122 columns)
 Output: output/output.xlsx    (589 rows, 132 columns)
@@ -202,3 +206,14 @@ output.xlsx = 122 original columns
   + mgmtRpt                         (Step 6)
 output_active.xlsx / output_void.xlsx / output_all.xlsx additionally add:
   + voidStatus                      (Step 7)
+
+All 4 files are written via write_excel_overwrite() (pipeline.py): if a
+file already exists at the target path it's deleted first, then the new
+one is written — a re-run always replaces stale output outright, never
+merges/appends, and fails with a clear "close it in Excel" error instead
+of a bare PermissionError if the target is locked open.
+
+This run was triggered from the CLI (`python pipeline.py rawData/original.xlsx`).
+The same 8 steps run identically from the Streamlit "Run Pipeline" page
+and from an unattended Windows Task Scheduler job configured on the
+Schedule page — see spec.txt sections 6 and 8.
