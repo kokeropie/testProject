@@ -1,0 +1,382 @@
+SPEC — Transform Pipeline App (pipeline.py + app.py)
+============================================================
+Status: Current (reflects what's built, not just what was planned)
+Built from: prd.txt (original PRD) + process.txt (reference run log) +
+            the current state of pipeline.py / app.py / rules_engine.py /
+            rule_importer.py / scheduler.py / path_picker.py
+
+This file supersedes prd.txt where they disagree — prd.txt was written
+before the rule-editor GUI and the Schedule feature existed, and still
+lists both as non-goals / open questions. Treat prd.txt + process.txt as
+historical design notes; treat this file as what the app actually does
+today.
+
+
+1. WHAT THIS APP IS
+--------------------
+A Streamlit app that turns a raw export (rawData/original.xlsx, or any
+CSV/XLS/XLSX with the same 122-column schema) into 4 enriched, report-ready
+workbooks — reproducing a previously manual, undocumented Qlik-based
+process — and lets a non-engineer both edit the underlying business rules
+and schedule the whole thing to run unattended.
+
+It has two independent halves that share nothing but the repo:
+
+  (a) KEDP ingest/compile (consumer.py, compiler.py) — Kafka JSON messages
+      -> Compiled_Report_YYYY-MM-DD.xlsx. Documented separately in
+      README.md. Not covered further here.
+
+  (b) Transform stage (pipeline.py, rules_engine.py, rule_importer.py,
+      app.py, scheduler.py, path_picker.py) — this spec's subject.
+      Takes a workbook and applies 8 ordered steps (rule-derived columns,
+      then an active/void split and union) to produce output/output.xlsx,
+      output_active.xlsx, output_void.xlsx, and output_all.xlsx.
+
+Whether (a) feeds (b) automatically (i.e. whether pipeline.py should read
+compiler.py's Compiled_Report_*.xlsx directly) is unresolved — see
+section 9.
+
+
+2. ARCHITECTURE
+----------------
+  dataFilter/*.txt     Qlik-style rule scripts (nested If()/LOAD-WHERE) —
+                        the original hand-authored business logic. 7 files:
+                        businessUnit, subBusinessUnit, product, channel,
+                        market, reportDate, mgmtRpt.
+
+  rule_importer.py      One-time parser: dataFilter/*.txt -> rules/*.json.
+                        Not run automatically — re-running it overwrites
+                        rules/*.json with a fresh parse, discarding any
+                        edits made through the app's rule editor. Meant to
+                        be run once at setup, or deliberately to reset a
+                        single step back to its source-file definition.
+
+  rules/*.json          Canonical DNF rule storage (see section 4). This,
+                        not dataFilter/*.txt, is what pipeline.py actually
+                        reads at run time. Editable live through app.py's
+                        rule-editor pages.
+
+  rules_engine.py        Shared rule model + evaluator: parses Qlik boolean
+                        text into DNF at import time, walks DNF against a
+                        row at run time. Used by both rule_importer.py
+                        (parse) and pipeline.py (evaluate).
+
+  pipeline.py            The 8-step transform (section 5) plus CLI entry
+                        point (`python pipeline.py <input> [--outdir DIR]`)
+                        and write_excel_overwrite() (section 7).
+
+  app.py                 Streamlit UI: a rule editor for each of the 7
+                        rule-derived steps, a Run Pipeline page, a Config
+                        page (voided-encoding + negation-column settings),
+                        and a Schedule page. Never imports pandas directly
+                        — reads/writes through pipeline.py.
+
+  scheduler.py            Schedule config I/O + Windows Task Scheduler
+                        (schtasks) command/`.bat` generation for running
+                        pipeline.py unattended (section 8).
+
+  path_picker.py          Cross-platform (macOS/Windows) file/folder
+                        browser widget used by the Schedule page, since a
+                        browser tab can't hand a native OS picker a path
+                        on the server's filesystem.
+
+
+3. INPUT / OUTPUT CONTRACT
+---------------------------
+Input:  one file in .csv, .xls, or .xlsx format, minimally containing the
+        columns consumed by the 7 rule files plus the Step 7 negation
+        list: Divisi, PCID, ClientSegment, ClientName, InvoiceID, Voided,
+        DateOfCreated, VoidDate, DATEOFSERVICESTART (see rules/*.json
+        "key_columns" per step for the full per-step list).
+  - Format is detected from file extension: .xls uses the xlrd engine,
+    .xlsx uses openpyxl, .csv goes through pandas.read_csv with explicit
+    date/numeric coercion afterward (pandas' CSV type inference doesn't
+    reliably match how the same column would be typed from Excel).
+  - Column matching is case-insensitive (rule text says `clientSegment`,
+    real data may have `ClientSegment`) via build_column_resolver(), plus
+    explicit renames from rules/config.json's `column_aliases` (e.g.
+    Qlik's `subChannels2` -> this app's `subChannels`).
+  - A rule leaf referencing a column absent from the input (e.g. `marker`,
+    `newPCID` — not present in the reference dataset) evaluates false
+    rather than raising, so the row still falls through to any other leg
+    of an OR condition.
+
+Outputs (all under output/, or wherever --outdir / the Schedule page's
+"Output folder" points):
+  output.xlsx          input + 10 derived columns (Steps 1-6)
+  output_active.xlsx    output.xlsx + voidStatus="all" on every row
+  output_void.xlsx      Voided<>0 subset + voidStatus="void" + 11
+                        monetary columns negated
+  output_all.xlsx       output_active.xlsx UNION output_void.xlsx — not
+                        deduped; voided rows legitimately appear twice
+                        (once positive as "all", once negated as "void")
+
+Reference-run counts (rawData/original.xlsx, 589 rows x 122 cols — the
+acceptance fixture, not a hardcoded expectation for other inputs):
+  output.xlsx         589 rows x 132 cols
+  output_active.xlsx   589 rows x 133 cols
+  output_void.xlsx       3 rows x 133 cols
+  output_all.xlsx      592 rows x 133 cols
+
+
+4. RULE ENGINE
+---------------
+rules/*.json canonical form:
+
+    condition := {"any": [clause, clause, ...]}          # OR of clauses
+    clause    := [leaf, leaf, ...]                        # AND of leaves
+    leaf      := {"column": str, "operator": op, "negate": bool,
+                  "value": literal}            OR
+                 {"column": str, "operator": op, "negate": bool,
+                  "value_column": str}         # compare to another column
+
+    op in {"=", "<>", "like", ">", ">=", "<", "<="}
+
+    result := {output_col: {"type": "literal", "value": X}, ...}
+            | {output_col: {"type": "column", "column": "SomeCol"}, ...}
+
+  {
+    "step": "businessUnit",
+    "label": "Business Unit",
+    "key_columns": ["Divisi"],
+    "output_columns": ["businessUnit"],
+    "default": {"businessUnit": {"type": "literal", "value": "LEI"}},
+    "rules": [
+      {"id": 1, "condition": {...}, "result": {...}}
+    ]
+  }
+
+First matching rule wins, evaluated in list order. `default` (may be null,
+meaning unmatched rows are left blank/flagged) applies when no rule
+matches.
+
+Two source dialects, both parsed by rule_importer.py into the same DNF:
+  (a) nested If(col = 'X', 'Y', If(...)) chains
+      -> businessUnit, subBusinessUnit, product, reportDate
+  (b) LOAD/Concatenate blocks, each an independent WHERE-style condition
+      with its own static output value(s), evaluated in file order
+      -> channel, market, mgmtRpt
+      mgmtRpt.txt additionally has one block commented out with
+      `//Where ...;` — rule_importer.py strips full-line `//` comments
+      before parsing so it isn't mistaken for a real block.
+
+Condition operators: =, <>, like (wildcard), >, >=, <, <=, and, or, not(),
+parentheses. reportDate's rules resolve to *other columns' values*, not
+literals (`{"type": "column", ...}` results).
+
+app.py's rule editor (per-step page) lets you add/edit/delete/reorder
+rules and edit the default, saving straight to rules/*.json — pipeline.py
+picks up edits on its next run, no restart needed.
+
+
+5. THE 8 STEPS (pipeline.py)
+------------------------------
+Steps 1-6 each derive one or more columns via the rule engine (section 4).
+Steps 7-8 split active/void and union them. Ordering is load-bearing —
+later steps depend on earlier steps' output columns, as noted below.
+
+  Step 1 — businessUnit, subBusinessUnit
+    Key: Divisi. Two independent rule files, no shared dependency.
+    Default 'LEI' for both (subBusinessUnit's on-disk default was 'DIS',
+    overridden to 'LEI' via rules/config.json, not a silent code patch).
+    Known source-file gap: businessUnit.txt lacks an explicit WSL rule
+    that subBusinessUnit.txt has — the importer injects WSL->WSL into
+    businessUnit's rules so the two columns agree.
+
+  Step 2 — productNew, subProduct
+    Key: PCID. One file, two independent If-chains. Default: passthrough
+    of the raw PCID value (not a literal) — untriggered in the reference
+    dataset but must still work.
+
+  Step 3 — Channels, subChannels
+    Keys: Divisi, ClientSegment, ClientName, InvoiceID. 19-block
+    partition, no default. Independent of Step 2, must run before Step 4.
+
+  Step 4 — Market, subMarket
+    Keys: Divisi, ClientSegment, ClientName, InvoiceID, subProduct
+    (Step 2), subChannels (Step 3). Hard dependency: after Steps 2 and 3.
+    12-block partition, no default.
+
+  Step 5 — reportDate
+    Keys: productNew (Step 2), Voided, DateOfCreated, VoidDate,
+    DATEOFSERVICESTART. Hard dependency: after Step 2.
+    Logic: non-SPECIALIST rows use DateOfCreated (VoidDate if voided);
+    SPECIALIST rows use DateOfCreated/VoidDate only if later than
+    DATEOFSERVICESTART, else DATEOFSERVICESTART itself. 6 conditions,
+    meant to be exhaustive, no default.
+
+  Step 6 — mgmtRpt
+    Keys: subBusinessUnit (Step 1), clientSegment, subProduct (Step 2),
+    Divisi, newPCID, marker, Channels (Step 3). Hard dependency: after
+    Steps 1, 2, 3. 19-block partition (one commented out and skipped, see
+    section 4), no default.
+
+  Step 7 — active/void split
+    output_active.xlsx: full copy of Step 1-6 output + voidStatus="all".
+    output_void.xlsx: rows where Voided <> 0 + voidStatus="void", then
+    these 11 columns multiplied by -1: ADDFEE, AGENTCHARGE, NETFARE,
+    NIGHTS, ORGAMT, RealNETFARE, RealTAX, SUBTOTAL, SUBTOTALORG, TAX, VAT.
+    Negation column list and the voided-active/void labels live in
+    rules/config.json, not hardcoded.
+
+  Step 8 — output_all.xlsx
+    Row-concatenation of output_active.xlsx + output_void.xlsx. Asserts
+    schema equality before concatenating. Not deduplicated — see
+    section 3.
+
+Voided-encoding handling (Steps 5 and 7): the rule text was written
+against a literal `Voided = 1` convention; the reference dataset instead
+encodes voided rows as a nonzero value (e.g. -1). rules/config.json's
+`voided_nonzero_encoding` flag, when set, rewrites any `Voided = <literal>`
+condition to `Voided <> 0` at rule-load time — configurable per dataset,
+not a hardcoded -1 assumption, and logged which convention was applied.
+
+
+6. STREAMLIT APP (app.py)
+---------------------------
+Pages (sidebar order): Run Pipeline, Schedule, Business Unit, Sub Business
+Unit, Product, Channel, Market, Report Date, Management Report, Config.
+
+  Run Pipeline
+    Upload a CSV/XLS/XLSX or use rawData/original.xlsx, run the full
+    8-step transform, preview each of the 4 outputs (first 50 rows),
+    download them individually, and optionally write them to output/ on
+    disk (force-overwrite, section 7). Shows per-step match-count tables
+    (rule id -> row count -> % of total) as an audit trail.
+
+  Business Unit / Sub Business Unit / Product / Channel / Market /
+  Report Date / Management Report
+    One page per rule-derived step. Lists rules in match order with
+    condition/result text, supports add/move up/move down/delete/edit
+    per rule (Qlik-style condition text, e.g.
+    `Divisi = 'CC01' and clientSegment <> 'SA'`), and an editable default
+    where the step has one. Product has two tabs (productNew, subProduct)
+    since it's one rule file with two independent chains. Each page has a
+    "Run against rawData/original.xlsx" preview button showing the
+    resulting match-count table without leaving the editor.
+
+  Config
+    rules/config.json's global settings: voided-column name and
+    nonzero-encoding toggle, the Step 7 negation column list, the
+    active/void voidStatus labels, and column_aliases.
+
+  Schedule
+    See section 8.
+
+Edits on any rule page save straight to rules/*.json — pipeline.py picks
+them up on its next run, no app restart needed.
+
+
+7. OUTPUT WRITING — FORCE OVERWRITE
+--------------------------------------
+Every .xlsx write in the app (pipeline.py's run_pipeline, app.py's
+Run Pipeline "write to disk" option, build_mgmt_report.py) goes through
+pipeline.write_excel_overwrite(df, path):
+  - creates the parent directory if missing
+  - if a file already exists at the target path, unlinks it first, rather
+    than relying on pandas' to_excel implicit truncate-on-write
+  - if the unlink fails (e.g. the file is open in Excel), raises a clear
+    error naming the likely cause instead of a bare PermissionError
+  - writes the new file via to_excel(..., engine="openpyxl")
+
+This guarantees a stale file with the same name is always fully replaced,
+never merged or appended to.
+
+
+8. SCHEDULING (scheduler.py + the Schedule page)
+----------------------------------------------------
+Streamlit has no background job runner — the process only executes code
+in response to a browser interaction. Scheduling therefore works the same
+way this repo already automates compiler.py/consumer.py: the Schedule
+page prepares a config and a `.bat` file; actually activating the
+schedule is a manual, one-time "run as Administrator" step on the Windows
+host, using Windows Task Scheduler (schtasks) — not something the
+Streamlit process does on its own.
+
+  Recurrence: Daily (every N days), Weekly (every N weeks, on chosen
+  weekdays), Monthly (day of month, every month), Annually (month + day
+  of month — schtasks has no native yearly trigger, so this maps to
+  `/SC MONTHLY /D <day> /M <month>`).
+
+  Start date (calendar) and an optional end date (calendar) — `/SD` and
+  `/ED`. No end date means the task recurs indefinitely.
+
+  Input file / Output folder: since a scheduled run is headless (no
+  browser upload possible), these are real filesystem paths, chosen by
+  typing directly or via the path_picker Browse widget (section 8a).
+
+Saving writes schedule_config.json (the source of truth for the form's
+current state) and regenerates register_scheduled_pipeline_task.bat,
+which follows the same structure as the existing
+register_compiler_task.bat / register_consumer_task.bat: admin check,
+Python detection, a timezone reminder, the `schtasks /Create` call
+(`/F` so re-running is safe/idempotent), then Query/Run/Delete reference
+commands. The task invokes `python pipeline.py <input_path> --outdir
+<outdir>` — the same CLI entry point used everywhere else.
+
+Task name: KEDP_ScheduledPipeline.
+
+8a. Path picker (path_picker.py)
+  A pure os/pathlib file-folder browser (no native OS dialog — a browser
+  tab can't hand a picker access to the server's filesystem). Type a path
+  directly, or expand Browse to navigate folders, jump Home, and (on
+  Windows) switch drives. Works identically on macOS and Windows since it
+  only uses os.name / pathlib, no hardcoded separators.
+
+
+9. NON-FUNCTIONAL REQUIREMENTS
+---------------------------------
+- Deterministic: same input file -> same row/column output every run (no
+  reliance on dict ordering or wall-clock time inside rule application).
+- Runs as a standalone script/stage, config-driven, consistent with the
+  existing consumer.py/compiler.py split. Uses openpyxl for .xlsx, xlrd
+  for legacy .xls (both in requirements.txt).
+- Performance target: 589 rows completes in well under 10s (rough
+  baseline: compiler.py's daily compile of ~850 files).
+
+
+10. OPEN QUESTIONS (carried from prd.txt, still unresolved)
+----------------------------------------------------------------
+- Does the transform stage read compiler.py's Compiled_Report_*.xlsx
+  directly, or does the input come from a separate manual export?
+  Determines whether it becomes Task-Scheduler-chained after compiler.py
+  or stays a standalone/scheduled-independently stage.
+- Should Step 3/4/6 zero-match rows (no-default partitions) hard-fail the
+  run, or just get flagged and passed through with nulls? The reference
+  dataset never exercised this path, so there's no precedent.
+- Is the businessUnit.txt missing-WSL-rule gap (section 5, Step 1) worth
+  fixing at the source (edit dataFilter/businessUnit.txt) instead of
+  patching around it in rules/*.json? Cheaper long-term, but changes a
+  file someone else may own.
+- Do real .csv/.xls inputs actually exist yet, or is that format support
+  speculative ahead of a concrete source?
+
+Resolved since prd.txt was written:
+  - Rule editing UI: built (app.py's per-step pages) — prd.txt's
+    "not building a UI for editing rules" no longer holds.
+  - Retention/versioning for output/*.xlsx: force-overwrite (section 7),
+    not timestamped like compiler.py's reports.
+  - Unattended/recurring execution: built (section 8) via Windows Task
+    Scheduler, mirroring the existing register_*.bat pattern.
+
+
+11. ACCEPTANCE CRITERIA
+--------------------------
+- Running the transform against rawData/original.xlsx reproduces the
+  exact row/column counts and per-rule match-count tables in
+  process.txt, for all 4 output files.
+- All 10 derived columns present in output.xlsx, in the Step 1-6 order
+  above.
+- output_void.xlsx contains exactly the 3 voided rows with the 11 listed
+  columns negated and the other 121 columns unchanged from their
+  output_active.xlsx values.
+- output_all.xlsx row count = output_active.xlsx + output_void.xlsx
+  (592 = 589 + 3), confirming union rather than dedup.
+- The above holds regardless of whether the input is .xlsx, .xls, or
+  .csv — same input rows, same 4 output files.
+- Re-running the pipeline against an output/ directory that already has
+  files of the same name overwrites them completely (section 7), never
+  errors on "file exists" and never appends/merges.
+- A schedule saved on the Schedule page, then activated via the
+  generated register_scheduled_pipeline_task.bat, produces the same 4
+  output files as a manual Run Pipeline click with the same input.
