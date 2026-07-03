@@ -1,6 +1,10 @@
 PRD — Transform Stage: original.xlsx -> output.xlsx (+ active/void split)
 ============================================================
-Status: Draft
+Status: Historical — the transform stage described here has since shipped,
+plus a rule-editor GUI and a Schedule feature this PRD explicitly scoped
+out (see 3, 8). For the current spec of the whole app, see spec.txt; this
+file is kept for the original problem statement and per-step functional
+requirements, which are still accurate.
 Source of truth for business rules: process.txt (this run's log) + dataFilter/*.txt (Qlik rule scripts)
 
 1. PROBLEM
@@ -33,12 +37,15 @@ so it runs the same way every time, without a human re-deriving the rules.
 
 3. NON-GOALS
 ------------
-- Not building a UI for editing rules — dataFilter/*.txt stay the source of
-  business logic; this stage only needs to parse and apply them.
+- [SUPERSEDED] Not building a UI for editing rules — dataFilter/*.txt stay
+  the source of business logic; this stage only needs to parse and apply
+  them. A rule-editor UI was in fact built (app.py) — rules/*.json, not
+  dataFilter/*.txt, is now the live source of business logic; see
+  spec.txt sections 4 and 6.
 - Not validating or fixing the Qlik rule files themselves.
 - Not wiring this into consumer.py/compiler.py's scheduled run in this PRD —
   output of compiler.py (Compiled_Report_*.xlsx) becoming the transform's
-  input is a follow-up integration decision (open question, see 8).
+  input is a follow-up integration decision (still unresolved, see 8).
 
 4. INPUT / OUTPUT CONTRACT
 ---------------------------
@@ -213,8 +220,10 @@ for all future inputs.
   source (edit dataFilter/businessUnit.txt) instead of patching around it
   in the engine config? Cheaper long-term but changes a file someone else
   may own.
-- Retention/versioning for output/*.xlsx — overwrite each run, or
-  timestamp like compiler.py's Compiled_Report_YYYY-MM-DD.xlsx?
+- [RESOLVED] Retention/versioning for output/*.xlsx — overwrite each run,
+  or timestamp like compiler.py's Compiled_Report_YYYY-MM-DD.xlsx? Answer:
+  force-overwrite, not timestamped — see write_excel_overwrite() /
+  spec.txt section 7.
 - Do real .csv/.xls inputs actually exist yet, or is this format support
   speculative ahead of a concrete source? Affects how much effort goes into
   dtype-coercion edge cases (4) vs. shipping .xlsx-only first and adding
