@@ -5,8 +5,9 @@ process.txt).
 Lets you view, add, edit, delete, and reorder the business rules for each
 derived-column step (Business Unit, Sub Business Unit, Product, Channel,
 Market, Report Date, Management Report) without hand-editing dataFilter/*.txt,
-and upload a CSV/XLS/XLSX file to run the full transform and download the 4
-output files.
+upload a CSV/XLS/XLSX file to run the full transform and download the 4
+output files, and configure a recurring unattended run via Windows Task
+Scheduler (see the Schedule page / scheduler.py).
 Rule edits are saved straight to rules/*.json, which pipeline.py reads when
 it actually runs the transform.
 
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 import io
 import json
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 
+from path_picker import path_picker
 from pipeline import (
     RULES_DIR,
     load_config as load_pipeline_config,
@@ -29,8 +32,23 @@ from pipeline import (
     run_derivation_steps,
     step7_active_void_split,
     step8_union,
+    write_excel_overwrite,
 )
 from rules_engine import condition_to_text, parse_condition_dnf, result_to_text
+from scheduler import (
+    MONTHS,
+    RECURRENCE_CHOICES,
+    REGISTER_BAT_PATH,
+    SCHEDULE_CONFIG_PATH,
+    WEEKDAYS,
+    delete_schedule_config,
+    format_schtasks_command,
+    load_schedule_config,
+    save_schedule_config,
+    summarize_schedule,
+    validate_schedule_config,
+    write_register_bat,
+)
 
 SAMPLE_DATA_PATH = Path(__file__).parent / "rawData" / "original.xlsx"
 OUTPUT_DIR = Path(__file__).parent / "output"
@@ -38,6 +56,7 @@ XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 STEP_PAGES = {
     "Run Pipeline": {"kind": "run"},
+    "Schedule": {"kind": "schedule"},
     "Business Unit": {"file": "businessUnit.json", "kind": "single", "has_default": True},
     "Sub Business Unit": {"file": "subBusinessUnit.json", "kind": "single", "has_default": True},
     "Product": {"file": "product.json", "kind": "product", "has_default": True},
@@ -296,12 +315,15 @@ def render_run_page() -> None:
         }
 
         if save_to_disk:
-            OUTPUT_DIR.mkdir(exist_ok=True)
-            output.to_excel(OUTPUT_DIR / "output.xlsx", index=False, engine="openpyxl")
-            active.to_excel(OUTPUT_DIR / "output_active.xlsx", index=False, engine="openpyxl")
-            void.to_excel(OUTPUT_DIR / "output_void.xlsx", index=False, engine="openpyxl")
-            all_rows.to_excel(OUTPUT_DIR / "output_all.xlsx", index=False, engine="openpyxl")
-            st.success(f"Also saved to {OUTPUT_DIR}/")
+            try:
+                write_excel_overwrite(output, OUTPUT_DIR / "output.xlsx")
+                write_excel_overwrite(active, OUTPUT_DIR / "output_active.xlsx")
+                write_excel_overwrite(void, OUTPUT_DIR / "output_void.xlsx")
+                write_excel_overwrite(all_rows, OUTPUT_DIR / "output_all.xlsx")
+            except OSError as e:
+                st.error(str(e))
+            else:
+                st.success(f"Also saved to {OUTPUT_DIR}/ (existing files there were overwritten)")
 
     result = st.session_state.get("run_result")
     if not result:
@@ -334,6 +356,156 @@ def render_run_page() -> None:
                         file_name="output_void.xlsx", mime=XLSX_MIME)
     d4.download_button("output_all.xlsx", to_excel_bytes(result["all"]),
                         file_name="output_all.xlsx", mime=XLSX_MIME)
+
+
+# ---------------------------------------------------------------------------
+# Schedule page: configure a recurring unattended run and hand off to
+# Windows Task Scheduler via a generated register_*.bat (see scheduler.py).
+# Streamlit itself has no background job runner, so this page only writes
+# config + the registration script — actually registering the task still
+# needs the manual "run as Administrator" step already used by
+# register_compiler_task.bat / register_consumer_task.bat.
+# ---------------------------------------------------------------------------
+
+def render_schedule_page() -> None:
+    st.header("Schedule")
+    st.caption(
+        "Configure a recurring, unattended run of the pipeline via Windows Task "
+        "Scheduler. Scheduled runs can't upload a file interactively, so point "
+        "'Input file' at a path that will exist on disk when the schedule fires."
+    )
+
+    config = load_schedule_config()
+
+    recurrence = st.radio(
+        "Run", RECURRENCE_CHOICES, horizontal=True,
+        index=RECURRENCE_CHOICES.index(config["recurrence"]),
+        key="sched_recurrence",
+    )
+
+    # start_date/has_end live outside the form: has_end must trigger an
+    # immediate rerun to reveal the end-date picker, and end_date's
+    # min_value needs start_date's current value — neither works with
+    # widgets trapped inside st.form, which only reruns on submit.
+    d1, d2 = st.columns(2)
+    start_date = d1.date_input("Start date", value=datetime.fromisoformat(config["start_date"]).date())
+    has_end = d2.checkbox("Set an end date for the auto-run", value=config.get("end_date") is not None)
+    end_date = None
+    if has_end:
+        default_end = (datetime.fromisoformat(config["end_date"]).date()
+                        if config.get("end_date") else start_date)
+        end_date = st.date_input(
+            "End date (schedule stops firing after this date)",
+            value=max(default_end, start_date), min_value=start_date,
+        )
+
+    # Not wrapped in st.form: path_picker's Browse buttons need to rerun
+    # immediately to navigate, and plain st.button isn't allowed inside
+    # st.form (only form_submit_button is).
+    interval = 1
+    weekdays = config["weekdays"]
+    day_of_month = config["day_of_month"]
+    month = config["month"]
+
+    if recurrence == "Daily":
+        interval = st.number_input(
+            "Every N day(s)", min_value=1, step=1,
+            value=int(config.get("interval", 1)) if config["recurrence"] == "Daily" else 1,
+        )
+    elif recurrence == "Weekly":
+        c1, c2 = st.columns(2)
+        interval = c1.number_input(
+            "Every N week(s)", min_value=1, step=1,
+            value=int(config.get("interval", 1)) if config["recurrence"] == "Weekly" else 1,
+        )
+        weekdays = c2.multiselect("On", WEEKDAYS, default=weekdays or ["Monday"])
+    elif recurrence == "Monthly":
+        day_of_month = st.number_input("Day of month", min_value=1, max_value=31,
+                                        value=int(day_of_month), step=1)
+    else:  # Annually
+        c1, c2 = st.columns(2)
+        month = c1.selectbox("Month", MONTHS, index=MONTHS.index(month))
+        day_of_month = c2.number_input("Day", min_value=1, max_value=31,
+                                        value=int(day_of_month), step=1)
+
+    run_time = st.time_input("Time of day", value=datetime.strptime(config["time"], "%H:%M").time())
+
+    st.divider()
+    p1, p2 = st.columns(2)
+    with p1:
+        input_path = path_picker(
+            "sched_input", config["input_path"], mode="file",
+            file_extensions=(".csv", ".xls", ".xlsx"), label="Input file",
+        )
+    with p2:
+        outdir = path_picker("sched_outdir", config["outdir"], mode="dir", label="Output folder")
+    st.caption(
+        "Paths are resolved on whichever machine runs the schedule — Browse walks that "
+        "machine's own filesystem (works the same on macOS or Windows)."
+    )
+
+    if st.button("Save schedule", type="primary"):
+        new_config = {
+            "recurrence": recurrence,
+            "interval": int(interval),
+            "weekdays": weekdays,
+            "day_of_month": int(day_of_month),
+            "month": month,
+            "time": run_time.strftime("%H:%M"),
+            "start_date": start_date.isoformat(),
+            "end_date": end_date.isoformat() if end_date else None,
+            "input_path": input_path,
+            "outdir": outdir,
+        }
+        errors = validate_schedule_config(new_config)
+        for e in errors:
+            st.error(e)
+        if not errors:
+            save_schedule_config(new_config)
+            bat_path = write_register_bat(new_config)
+            st.success(f"Saved. Registration script refreshed at {bat_path.name}.")
+            st.rerun()
+
+    if not SCHEDULE_CONFIG_PATH.exists():
+        st.info("No schedule saved yet.")
+        return
+
+    config = load_schedule_config()
+    st.divider()
+    st.subheader("Current schedule")
+    st.write(summarize_schedule(config))
+    st.caption(f"Input: `{config['input_path']}`  →  Output: `{config['outdir']}/`")
+
+    st.subheader("Activate it")
+    st.caption(
+        f"Run **{REGISTER_BAT_PATH.name}** as Administrator on the Windows machine that "
+        "should host this schedule — the same manual-approval step as "
+        "register_compiler_task.bat / register_consumer_task.bat. Re-running it after "
+        "editing the schedule above overwrites the existing task (`/F`)."
+    )
+    st.code(format_schtasks_command(config), language="bat")
+
+    if REGISTER_BAT_PATH.exists():
+        st.download_button(
+            f"Download {REGISTER_BAT_PATH.name}",
+            REGISTER_BAT_PATH.read_bytes(),
+            file_name=REGISTER_BAT_PATH.name,
+            mime="text/plain",
+        )
+
+    st.caption("Once registered, manage the task directly with schtasks:")
+    st.code(
+        'schtasks /Query  /TN "KEDP_ScheduledPipeline" /FO LIST /V\n'
+        'schtasks /Run    /TN "KEDP_ScheduledPipeline"\n'
+        'schtasks /Delete /TN "KEDP_ScheduledPipeline" /F',
+        language="bat",
+    )
+
+    if st.button("Delete saved schedule"):
+        delete_schedule_config()
+        st.success("Schedule config deleted. This does not remove an already-registered "
+                    "Windows task — use schtasks /Delete, shown above, for that.")
+        st.rerun()
 
 
 # ---------------------------------------------------------------------------
@@ -450,6 +622,8 @@ def main() -> None:
     info = STEP_PAGES[page]
     if info["kind"] == "run":
         render_run_page()
+    elif info["kind"] == "schedule":
+        render_schedule_page()
     elif info["kind"] == "single":
         render_single_step_page(page, info["file"], info["has_default"])
     elif info["kind"] == "product":

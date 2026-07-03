@@ -246,6 +246,27 @@ def step8_union(active: pd.DataFrame, void: pd.DataFrame) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
+# Output writing — force-overwrite: an existing file at the target path is
+# unlinked before writing, rather than relying on to_excel's implicit
+# truncate-on-write, so a re-run always replaces stale output outright
+# instead of silently failing on a locked/oddly-permissioned file.
+# ---------------------------------------------------------------------------
+
+def write_excel_overwrite(df: pd.DataFrame, path: Path) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists():
+        try:
+            path.unlink()
+        except OSError as e:
+            raise OSError(
+                f"Could not overwrite {path} — it may be open in another "
+                f"program (e.g. Excel). Close it and try again. ({e})"
+            ) from e
+    df.to_excel(path, index=False, engine="openpyxl")
+
+
+# ---------------------------------------------------------------------------
 # Orchestration
 # ---------------------------------------------------------------------------
 
@@ -265,10 +286,10 @@ def run_pipeline(input_path: Path, outdir: Path) -> dict[str, Path]:
         "output_void": outdir / "output_void.xlsx",
         "output_all": outdir / "output_all.xlsx",
     }
-    output.to_excel(paths["output"], index=False, engine="openpyxl")
-    active.to_excel(paths["output_active"], index=False, engine="openpyxl")
-    void.to_excel(paths["output_void"], index=False, engine="openpyxl")
-    all_rows.to_excel(paths["output_all"], index=False, engine="openpyxl")
+    write_excel_overwrite(output, paths["output"])
+    write_excel_overwrite(active, paths["output_active"])
+    write_excel_overwrite(void, paths["output_void"])
+    write_excel_overwrite(all_rows, paths["output_all"])
 
     log.info("done. output=%d rows, active=%d, void=%d, all=%d",
               len(output), len(active), len(void), len(all_rows))

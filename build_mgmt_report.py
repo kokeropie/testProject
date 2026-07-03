@@ -15,7 +15,13 @@ from pathlib import Path
 
 import pandas as pd
 
-from pipeline import _apply_single_output_step, build_column_resolver, load_config, load_step
+from pipeline import (
+    _apply_single_output_step,
+    build_column_resolver,
+    load_config,
+    load_step,
+    write_excel_overwrite,
+)
 
 log = logging.getLogger("build_mgmt_report")
 
@@ -29,7 +35,7 @@ def build_mgmt_report(source: Path, out: Path) -> Path:
     unmatched = stats["mgmtRpt"].get(None, 0)
     if unmatched:
         log.warning("mgmtRpt: %d row(s) matched no rule and were left null", unmatched)
-    df.to_excel(out, index=False, engine="openpyxl")
+    write_excel_overwrite(df, out)
     log.info("wrote %s: %d rows x %d cols", out, *df.shape)
     return out
 
