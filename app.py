@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import io
 import json
+import os
 from datetime import datetime
 from pathlib import Path
 
@@ -57,6 +58,7 @@ from scheduler import (
 from sql_import import (
     import_xlsx_to_sql,
     load_sql_config,
+    read_password,
     save_sql_config,
     validate_sql_config,
     verify_import,
@@ -579,15 +581,22 @@ def render_sql_import_page() -> None:
         format_func=lambda v: "Windows Authentication" if v == "windows" else "SQL Authentication",
     )
     username = ""
-    password = None
+    password_input = None
     if auth == "sql":
         c3, c4 = st.columns(2)
         username = c3.text_input("Username", value=config.get("username", ""))
-        password = c4.text_input(
+        password_input = c4.text_input(
             "Password", type="password",
-            help="Used only for this run and never written to disk. Scheduled/CLI "
-                 "runs read the MSSQL_PASSWORD environment variable instead.",
+            help="Leave blank to use the MSSQL_PASSWORD environment variable instead "
+                 "(set once at the OS level with 'setx MSSQL_PASSWORD ...' on Windows). "
+                 "Whatever you type here is used only for this run and never written to disk.",
         )
+        if not password_input:
+            if os.environ.get("MSSQL_PASSWORD"):
+                st.caption("Password field is blank — using MSSQL_PASSWORD from the environment.")
+            else:
+                st.caption("Password field is blank and MSSQL_PASSWORD isn't set — "
+                           "the import will fail to authenticate.")
 
     st.subheader("Target")
     t1, t2 = st.columns(2)
@@ -619,6 +628,7 @@ def render_sql_import_page() -> None:
         for e in errors:
             st.error(e)
         if not errors:
+            password = read_password(new_config, password_input)
             try:
                 with st.spinner("Importing..."):
                     result = import_xlsx_to_sql(Path(xlsx_path), new_config, password)
