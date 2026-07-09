@@ -126,7 +126,7 @@ def _safe_chunksize(configured: int, n_columns: int) -> int:
     """pandas.to_sql(method="multi") packs `chunksize` rows into a single
     INSERT, so `chunksize x n_columns` bound parameters must stay under
     SQL Server's ~2100-parameter ceiling. A wide table (e.g. this repo's
-    77-133 column output workbooks) blows past that with the default
+    77-135 column output workbooks) blows past that with the default
     chunksize=1000 long before row count is the limiting factor — 1000
     rows x 77 columns = 77,000 parameters, so the very first batch insert
     is rejected outright (the table's already-committed DDL is why you'd
