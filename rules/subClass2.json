@@ -1,0 +1,1993 @@
+{
+  "step": "subClass2",
+  "label": "Sub Class 2",
+  "key_columns": [
+    "subClass",
+    "AIRLINE"
+  ],
+  "output_columns": [
+    "subClass2"
+  ],
+  "default": {
+    "subClass2": {
+      "type": "literal",
+      "value": "Economy"
+    }
+  },
+  "rules": [
+    {
+      "id": 1,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "F",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "C",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "D",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "J",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "AF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "NH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CX",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MU",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EY",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "GA",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "JL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KE",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "WY",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 19,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "TG",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "GA",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "First"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 24,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "AF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "AF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "O",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 26,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "AF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 27,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "NH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 28,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "NH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 29,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "OZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "OZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "U",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 31,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "OZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 32,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CX",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 33,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CX",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 34,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MU",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MU",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Q",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 36,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MU",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 37,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 38,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 39,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "E",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 40,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 41,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "H",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 42,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "O",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 43,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EY",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 44,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "EY",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 45,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "GA",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 46,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "JL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 47,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "JL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "X",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 48,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 49,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "O",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 50,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 51,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KE",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 52,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KE",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 53,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KE",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 54,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 55,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 56,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "WY",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 57,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "WY",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 58,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 59,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 60,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 61,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 62,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 63,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "BI",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 64,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "BI",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 65,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "U",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 66,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 67,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "TG",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 68,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "TK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 69,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "TK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "K",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 70,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "TK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 71,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "TK",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 72,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "VN",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 73,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "VN",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "O",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    },
+    {
+      "id": 74,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "VN",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "Z",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass2": {
+          "type": "literal",
+          "value": "Business"
+        }
+      }
+    }
+  ]
+}

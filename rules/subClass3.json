@@ -1,0 +1,1073 @@
+{
+  "step": "subClass3",
+  "label": "Sub Class 3",
+  "key_columns": [
+    "subClass",
+    "AIRLINE",
+    "subClass2"
+  ],
+  "output_columns": [
+    "subClass3"
+  ],
+  "default": {
+    "subClass3": {
+      "type": "column",
+      "column": "subClass2"
+    }
+  },
+  "rules": [
+    {
+      "id": 1,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "G",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CA",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "E",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "AF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "AF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "S",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "AF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "NH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "G",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "NH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "E",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "NH",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "N",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CX",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CX",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "E",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 11,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CX",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 12,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CI",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 13,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CI",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "E",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CI",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "U",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 15,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CI",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 16,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MU",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "I",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MU",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 18,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "MU",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 19,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 20,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "S",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 21,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "CZ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 22,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "BR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "K",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 23,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "BR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "L",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 24,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "BR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 25,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "BR",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "T",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 26,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "JL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "E",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 27,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "JL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 28,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "JL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 29,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "A",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 30,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "S",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 31,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "KL",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 32,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 33,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "T",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 34,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "QF",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "W",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 35,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "L",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 36,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "P",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 37,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "R",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 38,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "S",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    },
+    {
+      "id": 39,
+      "condition": {
+        "any": [
+          [
+            {
+              "column": "AIRLINE",
+              "operator": "=",
+              "value": "SQ",
+              "negate": false
+            },
+            {
+              "column": "subClass",
+              "operator": "=",
+              "value": "T",
+              "negate": false
+            }
+          ]
+        ]
+      },
+      "result": {
+        "subClass3": {
+          "type": "literal",
+          "value": "Premium Economy"
+        }
+      }
+    }
+  ]
+}

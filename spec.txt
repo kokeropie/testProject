@@ -103,7 +103,8 @@ Input:  one file in .csv, .xls, or .xlsx format, minimally containing the
 
 Outputs (all under output/, or wherever --outdir / the Schedule page's
 "Output folder" points):
-  output.xlsx          input + 10 derived columns (Steps 1-6)
+  output.xlsx          input + 10 derived columns (Steps 1-6) + subClass
+                        + subClass3 (subClass2 is an intermediate, not kept)
   output_active.xlsx    output.xlsx + voidStatus="all" on every row
   output_void.xlsx      Voided<>0 subset + voidStatus="void" + 11
                         monetary columns negated
@@ -113,10 +114,10 @@ Outputs (all under output/, or wherever --outdir / the Schedule page's
 
 Reference-run counts (rawData/original.xlsx, 589 rows x 122 cols — the
 acceptance fixture, not a hardcoded expectation for other inputs):
-  output.xlsx         589 rows x 132 cols
-  output_active.xlsx   589 rows x 133 cols
-  output_void.xlsx       3 rows x 133 cols
-  output_all.xlsx      592 rows x 133 cols
+  output.xlsx         589 rows x 134 cols
+  output_active.xlsx   589 rows x 135 cols
+  output_void.xlsx       3 rows x 135 cols
+  output_all.xlsx      592 rows x 135 cols
 
 
 4. RULE ENGINE
@@ -210,6 +211,33 @@ later steps depend on earlier steps' output columns, as noted below.
     Divisi, newPCID, marker, Channels (Step 3). Hard dependency: after
     Steps 1, 2, 3. 19-block partition (one commented out and skipped, see
     section 4), no default.
+
+  subClass (derive_sub_class(), not rule-engine driven)
+    Key: SUMMARYROUTE. Runs after Step 6, before subClass2/subClass3.
+    Formula: If(right(SUMMARYROUTE,1) = ')', left(right(SUMMARYROUTE,2),1),
+    right(SUMMARYROUTE,1)) — the booking-class letter is normally the
+    last character of SUMMARYROUTE, but for a route ending in a
+    parenthesized class code (e.g. 'CGK DPS (I)', or a multi-segment
+    route like 'DJB CGK (Y)/CGK SUB (Y)') it's the character just before
+    the closing paren. Vectorized pandas string ops, not JSON-configured
+    — there's no rules/subClass.json and no editor page. Null when
+    SUMMARYROUTE itself is null (138/589 rows in the reference dataset).
+    Represented internally as plain object/None, not pandas' nullable
+    "string" dtype — pd.NA's equality semantics break the rule engine's
+    `all(eval_leaf(...))` check in subClass2/subClass3 below (bool(pd.NA)
+    raises), where None just compares False like any other Python value.
+
+  subClass2 / subClass3 (derive_sub_class2_and_3(), rule-engine driven —
+  rules/subClass2.json, rules/subClass3.json, imported from
+  dataFilter/subClass2.txt / subClass3.txt via rule_importer.py's
+  _parse_nested_if_chain_multi(), the one dialect-(a) importer that
+  supports compound AND conditions like "AIRLINE = 'AF' and subClass = 'A'")
+    Keys: subClass (above), AIRLINE. Hard dependency: after subClass.
+    subClass2: 74-rule nested-If chain -> First/Business/Economy, default
+    'Economy'. subClass3: 39-rule nested-If chain of per-carrier Premium
+    Economy exceptions, default = subClass2's value (column passthrough,
+    not a literal) when none match. Only subClass3 is kept in the output
+    — subClass2 is a same-row intermediate, dropped before Step 7.
 
   Step 7 — active/void split
     output_active.xlsx: full copy of Step 1-6 output + voidStatus="all".
@@ -365,8 +393,9 @@ Resolved since prd.txt was written:
 - Running the transform against rawData/original.xlsx reproduces the
   exact row/column counts and per-rule match-count tables in
   process.txt, for all 4 output files.
-- All 10 derived columns present in output.xlsx, in the Step 1-6 order
-  above.
+- All 10 rule-derived columns present in output.xlsx, in the Step 1-6
+  order above, plus subClass as the 11th derived column and subClass3 as
+  the 12th (subClass2 is a dropped intermediate, not a 13th column).
 - output_void.xlsx contains exactly the 3 voided rows with the 11 listed
   columns negated and the other 121 columns unchanged from their
   output_active.xlsx values.

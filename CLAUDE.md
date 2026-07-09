@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Two independent pipelines in one repo, sharing nothing but Python + this checkout:
 
 1. **KEDP ingest/compile** (`consumer.py`, `compiler.py`, `utils.py`) — Kafka JSON messages -> daily `Compiled_Report_YYYY-MM-DD.xlsx`. Documented in `README.md`.
-2. **Transform stage + Streamlit app** (`pipeline.py`, `rules_engine.py`, `rule_importer.py`, `app.py`, `scheduler.py`, `path_picker.py`) — takes a raw export (originally a manual, undocumented Qlik process) and derives 10 business columns via a first-match-wins rule engine, splits active/void, and produces 4 report-ready workbooks. Has a Streamlit UI for editing the rules, running the transform, and scheduling unattended runs via Windows Task Scheduler. Optionally loads any of the 4 output workbooks straight into a SQL Server table (`sql_import.py`, `sql_scheduler.py`) — its own step, menu, and schedule, independent of the xlsx outputs.
+2. **Transform stage + Streamlit app** (`pipeline.py`, `rules_engine.py`, `rule_importer.py`, `app.py`, `scheduler.py`, `path_picker.py`) — takes a raw export (originally a manual, undocumented Qlik process) and derives 12 business columns (11 via a first-match-wins rule engine, plus `subClass` via a formula, see below; a 13th, `subClass2`, is computed as an intermediate and dropped), splits active/void, and produces 4 report-ready workbooks. Has a Streamlit UI for editing the rules, running the transform, and scheduling unattended runs via Windows Task Scheduler. Optionally loads any of the 4 output workbooks straight into a SQL Server table (`sql_import.py`, `sql_scheduler.py`) — its own step, menu, and schedule, independent of the xlsx outputs.
 
 **`spec.txt` is the current, authoritative spec for the transform stage + app.** `prd.txt` (original PRD) and `process.txt` (log of one reference run) predate the rule-editor GUI and the Schedule feature — treat them as historical design notes where they disagree with `spec.txt`.
 
@@ -62,7 +62,7 @@ path_picker.py                         Cross-platform (macOS/Windows) file/folde
                                         widget used by the Schedule and SQL pages
 sql_import.py                          Loads an output workbook into a SQL Server table
                                         (TRUNCATE+load or append) + CLI entry point; auto-caps
-                                        pandas.to_sql's chunksize so wide tables (77-133 cols)
+                                        pandas.to_sql's chunksize so wide tables (77-135 cols)
                                         stay under SQL Server's ~2100-param-per-statement limit
 sql_scheduler.py                       Schedule config I/O + schtasks/.bat generation for
                                         recurring sql_import.py runs — mirrors scheduler.py,
@@ -84,7 +84,11 @@ register_scheduled_sql_import_task.bat SQL connection settings + SQL import sche
 
 ## Rule engine
 
-Which `businessUnit`/`productNew`/`Channels`/`Market`/`reportDate`/`mgmtRpt` a row gets is decided by first-match-wins conditions stored in `rules/*.json` (canonical DNF — see `spec.txt` section 4), not hardcoded in Python. Edit rules through the Streamlit rule editor, not by hand-editing `dataFilter/*.txt` or `rules/*.json` directly — `rule_importer.py` is a one-time importer, not something to re-run casually.
+Which `businessUnit`/`productNew`/`Channels`/`Market`/`reportDate`/`mgmtRpt`/`subClass2`/`subClass3` a row gets is decided by first-match-wins conditions stored in `rules/*.json` (canonical DNF — see `spec.txt` section 4), not hardcoded in Python. Edit rules through the Streamlit rule editor, not by hand-editing `dataFilter/*.txt` or `rules/*.json` directly — `rule_importer.py` is a one-time importer, not something to re-run casually (it also overwrites every file in its `steps` dict on each run, not just the one you care about — importing a newly-added `dataFilter/*.txt` should generate just that file's `rules/*.json`, e.g. via a one-off script, not a full `rule_importer.run()`).
+
+`subClass2`/`subClass3` (`dataFilter/subClass2.txt`, `subClass3.txt`) are the one dialect-(a) pair whose `If()` conditions can be a compound AND (e.g. `AIRLINE = 'AF' and subClass = 'A'`), not just a single `column = literal` leaf — `rule_importer._parse_nested_if_chain_multi()` handles that by parsing each condition through the same tokenizer used for the LOAD/WHERE dialect (`parse_condition_dnf`), rather than the single-leaf regex the other nested-If files use.
+
+`subClass` is the one derived column that's *not* rule-engine driven — it's a fixed formula on `SUMMARYROUTE` (`derive_sub_class()` in `pipeline.py`), so it has no `rules/*.json` file and no rule-editor page. `subClass2` is computed as an intermediate for `subClass3`'s default (column passthrough, not a literal) and dropped before the output is written — it's never a persisted column.
 
 ## Output files
 

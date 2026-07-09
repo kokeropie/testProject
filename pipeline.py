@@ -3,8 +3,13 @@ Transform pipeline: input (csv/xls/xlsx) -> output.xlsx / output_active.xlsx /
 output_void.xlsx / output_all.xlsx, per prd.txt / process.txt.
 
 Steps 1-6 apply the rule-engine JSON in rules/*.json (edited via app.py) to
-derive 10 new columns. Step 7 splits active/void and negates the configured
-monetary columns for void rows. Step 8 concatenates the two into a union.
+derive 10 new columns. A formula-based step then derives subClass from
+SUMMARYROUTE (not rule-engine driven — see derive_sub_class()), followed by
+two more rule-engine steps (rules/subClass2.json, rules/subClass3.json)
+that derive subClass3 from subClass + AIRLINE, discarding the intermediate
+subClass2 (see derive_sub_class2_and_3()). Step 7 splits active/void and
+negates the configured monetary columns for void rows. Step 8 concatenates
+the two into a union.
 
 Usage (CLI):
     python pipeline.py rawData/original.xlsx
@@ -19,7 +24,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from rules_engine import apply_step, MatchOutcome
+from rules_engine import apply_step, resolve_column, MatchOutcome
 
 RULES_DIR = Path(__file__).parent / "rules"
 
@@ -226,6 +231,43 @@ def step6_mgmt_rpt(df: pd.DataFrame, column_aliases: dict, stats: dict | None = 
     return df
 
 
+def derive_sub_class(df: pd.DataFrame, column_aliases: dict) -> pd.DataFrame:
+    """subClass = If(right(SUMMARYROUTE,1) = ')', left(right(SUMMARYROUTE,2),1),
+    right(SUMMARYROUTE,1)) — the booking-class letter is the last character of
+    SUMMARYROUTE, unless it's wrapped in parens (e.g. 'CGK DPS (I)' or a
+    multi-segment route like 'DJB CGK (Y)/CGK SUB (Y)'), in which case it's
+    the character just before the closing paren."""
+    df = df.copy()
+    col = resolve_column("SUMMARYROUTE", column_aliases)
+    if col not in df.columns:
+        df["subClass"] = None
+        return df
+    route = df[col].astype("string")
+    last = route.str[-1]
+    second_last = route.str[-2]
+    sub_class = second_last.where(last == ")", last)
+    # plain object/None, not pandas' nullable "string" dtype: downstream rule
+    # evaluation (rules_engine._cmp_ok) does actual == expected under all(),
+    # and pd.NA's __eq__ returns pd.NA rather than False, which bool() can't
+    # resolve — None compares the same way regular Python values do.
+    df["subClass"] = pd.Series(sub_class.to_numpy(dtype=object, na_value=None), index=df.index)
+    return df
+
+
+def derive_sub_class2_and_3(df: pd.DataFrame, column_aliases: dict, stats: dict | None = None) -> pd.DataFrame:
+    """subClass2 (dataFilter/subClass2.txt): First/Business/Economy from
+    subClass + AIRLINE. subClass3 (dataFilter/subClass3.txt): per-carrier
+    Premium Economy exceptions on subClass + AIRLINE, falling back to the
+    just-computed subClass2 value otherwise. Both are rule-engine driven
+    (rules/subClass2.json, rules/subClass3.json), unlike subClass itself.
+    Only subClass3 is kept in the output — subClass2 is an intermediate."""
+    df = df.copy()
+    df["subClass2"] = _apply_single_output_step(df, load_step("subClass2"), column_aliases, stats)
+    df["subClass3"] = _apply_single_output_step(df, load_step("subClass3"), column_aliases, stats)
+    df = df.drop(columns=["subClass2"])
+    return df
+
+
 def build_column_resolver(df: pd.DataFrame, config: dict) -> dict[str, str]:
     """Case-insensitive fallback for every input column (rule text was
     hand-written against a Qlik schema that doesn't always match this data's
@@ -250,6 +292,8 @@ def run_derivation_steps(df: pd.DataFrame, config: dict, stats: dict | None = No
     df = step4_market(df, aliases, stats)
     df = step5_report_date(df, aliases, config, stats)
     df = step6_mgmt_rpt(df, aliases, stats)
+    df = derive_sub_class(df, aliases)
+    df = derive_sub_class2_and_3(df, aliases, stats)
     return df
 
 
@@ -290,6 +334,7 @@ def step8_union(active: pd.DataFrame, void: pd.DataFrame) -> pd.DataFrame:
 DERIVED_COLUMNS = [
     "businessUnit", "subBusinessUnit", "productNew", "subProduct",
     "Channels", "subChannels", "Market", "subMarket", "reportDate", "mgmtRpt",
+    "subClass", "subClass3",
 ]
 
 

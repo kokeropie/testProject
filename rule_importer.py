@@ -45,6 +45,31 @@ def _parse_nested_if_chain(text: str) -> tuple[list[tuple[str, str, str, str]], 
     return rules, rest
 
 
+_IF_MULTI_RE = re.compile(
+    r"If\(\s*(?P<cond>[^,]+?)\s*,\s*'(?P<res>[^']*)'\s*,\s*",
+    re.IGNORECASE,
+)
+
+
+def _parse_nested_if_chain_multi(text: str) -> tuple[list[tuple[dict, str]], str]:
+    """Same shape as _parse_nested_if_chain, but each If()'s condition may be
+    a compound boolean expression (e.g. "AIRLINE = 'AF' and subClass = 'A'"),
+    not just a single column = literal leaf — parsed via the same
+    tokenizer/parser used for the LOAD/WHERE dialect (parse_condition_dnf)."""
+    text = text.strip()
+    rules = []
+    pos = 0
+    while True:
+        m = _IF_MULTI_RE.match(text, pos)
+        if not m:
+            break
+        rules.append((parse_condition_dnf(m.group("cond")), m.group("res")))
+        pos = m.end()
+    rest = text[pos:].strip()
+    rest = re.split(r"\)+\s*(as\s+\w+)?\s*,?\s*$", rest, flags=re.IGNORECASE)[0].strip()
+    return rules, rest
+
+
 def _default_spec(output_col: str, rest: str) -> dict:
     if rest.startswith("'") and rest.endswith("'"):
         return {output_col: {"type": "literal", "value": rest.strip("'")}}
@@ -119,6 +144,44 @@ def import_product() -> dict:
                 "rules": rules2,
             },
         },
+    }
+
+
+def import_sub_class2() -> dict:
+    """subClass2.txt: nested If chain, keyed on subClass (itself derived from
+    SUMMARYROUTE — see pipeline.derive_sub_class()) and AIRLINE for the
+    per-carrier First/Business exceptions. Default 'Economy'."""
+    text = (DATA_FILTER_DIR / "subClass2.txt").read_text()
+    idx = text.index("as subClass2")
+    chain_rules, rest = _parse_nested_if_chain_multi(text[:idx])
+    rules = [{"id": i, "condition": cond, "result": {"subClass2": {"type": "literal", "value": res}}}
+              for i, (cond, res) in enumerate(chain_rules, start=1)]
+    return {
+        "step": "subClass2",
+        "label": "Sub Class 2",
+        "key_columns": ["subClass", "AIRLINE"],
+        "output_columns": ["subClass2"],
+        "default": _default_spec("subClass2", rest),
+        "rules": rules,
+    }
+
+
+def import_sub_class3() -> dict:
+    """subClass3.txt: nested If chain of per-carrier Premium Economy
+    exceptions, keyed on subClass and AIRLINE; falls back to subClass2
+    (column passthrough, not a literal) when none match."""
+    text = (DATA_FILTER_DIR / "subClass3.txt").read_text()
+    idx = text.index("as subClass3")
+    chain_rules, rest = _parse_nested_if_chain_multi(text[:idx])
+    rules = [{"id": i, "condition": cond, "result": {"subClass3": {"type": "literal", "value": res}}}
+              for i, (cond, res) in enumerate(chain_rules, start=1)]
+    return {
+        "step": "subClass3",
+        "label": "Sub Class 3",
+        "key_columns": ["subClass", "AIRLINE", "subClass2"],
+        "output_columns": ["subClass3"],
+        "default": _default_spec("subClass3", rest),
+        "rules": rules,
     }
 
 
@@ -238,6 +301,8 @@ def run() -> None:
         "market": import_market(),
         "reportDate": import_report_date(),
         "mgmtRpt": import_mgmt_rpt(),
+        "subClass2": import_sub_class2(),
+        "subClass3": import_sub_class3(),
     }
     for name, step_def in steps.items():
         out_path = RULES_DIR / f"{name}.json"
