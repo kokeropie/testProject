@@ -5,3 +5,4 @@ xlrd>=2.0.0
 streamlit>=1.30.0
 sqlalchemy>=2.0.0
 pyodbc>=5.0.0
+certifi>=2024.2.2

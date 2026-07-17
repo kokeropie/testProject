@@ -19,7 +19,7 @@ from __future__ import annotations
 import io
 import json
 import os
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 import pandas as pd
@@ -39,6 +39,31 @@ from pipeline import (
     verify_outputs,
     write_excel_overwrite,
     write_verification_report,
+)
+from report_fetch import (
+    SOURCES,
+    cs_env_var,
+    fetch_all,
+    load_report_fetch_config,
+    read_cs,
+    save_report_fetch_config,
+    summarize_results,
+    validate_report_fetch_scope,
+)
+from report_fetch_scheduler import (
+    ALL_PRODUCTS as FETCH_ALL_PRODUCTS,
+    ALL_SOURCES as FETCH_ALL_SOURCES,
+    FETCH_SCHEDULE_CONFIG_PATH,
+    REGISTER_FETCH_BAT_PATH,
+    TASK_NAME as FETCH_TASK_NAME,
+    delete_fetch_schedule_config,
+    fetch_schedule_warnings,
+    format_fetch_schtasks_command,
+    load_fetch_schedule_config,
+    save_fetch_schedule_config,
+    summarize_fetch_schedule,
+    validate_fetch_schedule_config,
+    write_fetch_register_bat,
 )
 from rules_engine import condition_to_text, parse_condition_dnf, result_to_text
 from scheduler import (
@@ -93,6 +118,8 @@ STEP_PAGES = {
     "Config": {"file": "config.json", "kind": "config", "has_default": None},
     "Import to SQL Server": {"kind": "sql_import"},
     "Schedule SQL Import": {"kind": "sql_schedule"},
+    "Fetch Daily Reports": {"kind": "report_fetch"},
+    "Schedule Daily Reports": {"kind": "report_fetch_schedule"},
 }
 
 
@@ -802,6 +829,241 @@ def render_sql_schedule_page() -> None:
 
 
 # ---------------------------------------------------------------------------
+# Fetch Daily Reports page: pull KATRINA / COBT MT PROD / COBT DANAMON PROD
+# daily transaction reports (flight/train/hotel) and extract them into a
+# folder (see report_fetch.py). New, additive page - doesn't touch any
+# existing page's logic.
+# ---------------------------------------------------------------------------
+
+def render_report_fetch_page() -> None:
+    st.header("Fetch Daily Reports")
+    st.caption(
+        "Pulls daily transaction reports from KATRINA, COBT MT PROD, and COBT DANAMON PROD "
+        "(flight/train/hotel each) and extracts the CSVs into a folder. Auth is HTTP Basic "
+        "(ck/cs) - ck saves to report_fetch_config.json, cs never does; see report_fetch.py."
+    )
+
+    config = load_report_fetch_config()
+    st.subheader("Credentials")
+    cs_values: dict[str, str | None] = {}
+    for key, source in SOURCES.items():
+        c1, c2 = st.columns(2)
+        config[key] = c1.text_input(f"{source['label']} ck", value=config.get(key, ""), key=f"fetch_ck_{key}")
+        cs_input = c2.text_input(
+            f"{source['label']} cs", type="password", key=f"fetch_cs_{key}",
+            help=f"Leave blank to use the {cs_env_var(key)} environment variable instead. "
+                 "Used only for this run, never written to disk.",
+        )
+        cs_values[key] = read_cs(key, cs_input)
+        if not cs_input and not os.environ.get(cs_env_var(key)):
+            c2.caption(f"cs is blank and {cs_env_var(key)} isn't set - this source will fail.")
+
+    if st.button("Save ck values"):
+        save_report_fetch_config(config)
+        st.success("Saved (cs was not written to disk).")
+
+    st.divider()
+    st.subheader("What to fetch")
+    c1, c2, c3 = st.columns(3)
+    days_ago = c1.number_input("Days ago (0 = today)", min_value=0, step=1, value=1, key="fetch_days_ago")
+    report_date = (date.today() - timedelta(days=int(days_ago))).isoformat()
+    c2.text_input("Report date", value=report_date, disabled=True)
+    sources = c3.multiselect("Sources", list(SOURCES.keys()), default=list(SOURCES.keys()),
+                              format_func=lambda k: SOURCES[k]["label"], key="fetch_sources")
+    products = st.multiselect("Products", ["flight", "train", "hotel"],
+                               default=["flight", "train", "hotel"], key="fetch_products")
+
+    outdir = path_picker("fetch_outdir", "rawData/katrina_daily_reports", mode="dir", label="Output folder")
+
+    if st.button("Run fetch now", type="primary"):
+        errors = validate_report_fetch_scope(config, sources, cs_values)
+        for e in errors:
+            st.error(e)
+        if not errors:
+            with st.spinner("Fetching..."):
+                results = fetch_all(report_date, Path(outdir), config, cs_values,
+                                     sources=sources, products=products)
+            ok = sum(1 for r in results if r["status"] == "ok")
+            if ok == len(results):
+                st.success(f"{ok}/{len(results)} endpoint(s) OK. Saved to {outdir}/")
+            else:
+                st.warning(f"{ok}/{len(results)} endpoint(s) OK.")
+            st.code(summarize_results(results), language=None)
+
+
+# ---------------------------------------------------------------------------
+# Schedule Daily Reports page: configure a recurring, unattended
+# report_fetch.py run via Windows Task Scheduler (see
+# report_fetch_scheduler.py). Mirrors the Schedule / Schedule SQL Import
+# pages' pattern - a separate config/task, so registering or deleting this
+# schedule never touches the other two.
+# ---------------------------------------------------------------------------
+
+def render_report_fetch_schedule_page() -> None:
+    st.header("Schedule Daily Reports")
+    st.caption(
+        "Configure a recurring, unattended report_fetch.py run via Windows Task Scheduler. "
+        "Each source's cs must be set as a system environment variable on the machine that "
+        "runs the schedule - see report_fetch_scheduler.py's docstring."
+    )
+
+    config = load_fetch_schedule_config()
+
+    recurrence = st.radio(
+        "Run", RECURRENCE_CHOICES, horizontal=True,
+        index=RECURRENCE_CHOICES.index(config["recurrence"]),
+        key="fetchsched_recurrence",
+    )
+
+    d1, d2 = st.columns(2)
+    start_date = d1.date_input(
+        "Start date", value=datetime.fromisoformat(config["start_date"]).date(), key="fetchsched_start",
+    )
+    has_end = d2.checkbox(
+        "Set an end date for the auto-run", value=config.get("end_date") is not None, key="fetchsched_has_end",
+    )
+    end_date = None
+    if has_end:
+        default_end = (datetime.fromisoformat(config["end_date"]).date()
+                        if config.get("end_date") else start_date)
+        end_date = st.date_input(
+            "End date (schedule stops firing after this date)",
+            value=max(default_end, start_date), min_value=start_date, key="fetchsched_end",
+        )
+
+    interval = 1
+    weekdays = config["weekdays"]
+    day_of_month = config["day_of_month"]
+    month = config["month"]
+
+    if recurrence == "Daily":
+        interval = st.number_input(
+            "Every N day(s)", min_value=1, step=1,
+            value=int(config.get("interval", 1)) if config["recurrence"] == "Daily" else 1,
+            key="fetchsched_interval_daily",
+        )
+    elif recurrence == "Weekly":
+        c1, c2 = st.columns(2)
+        interval = c1.number_input(
+            "Every N week(s)", min_value=1, step=1,
+            value=int(config.get("interval", 1)) if config["recurrence"] == "Weekly" else 1,
+            key="fetchsched_interval_weekly",
+        )
+        weekdays = c2.multiselect("On", WEEKDAYS, default=weekdays or ["Monday"], key="fetchsched_weekdays")
+    elif recurrence == "Monthly":
+        day_of_month = st.number_input(
+            "Day of month", min_value=1, max_value=31,
+            value=int(day_of_month), step=1, key="fetchsched_dom_monthly",
+        )
+    else:  # Annually
+        c1, c2 = st.columns(2)
+        month = c1.selectbox("Month", MONTHS, index=MONTHS.index(month), key="fetchsched_month")
+        day_of_month = c2.number_input(
+            "Day", min_value=1, max_value=31,
+            value=int(day_of_month), step=1, key="fetchsched_dom_annual",
+        )
+
+    run_time = st.time_input(
+        "Time of day", value=datetime.strptime(config["time"], "%H:%M").time(), key="fetchsched_time",
+    )
+
+    st.divider()
+    c1, c2 = st.columns(2)
+    days_ago = c1.number_input("Days ago (0 = today)", min_value=0, step=1,
+                                value=int(config.get("days_ago", 1)), key="fetchsched_days_ago")
+    sources = c2.multiselect("Sources", FETCH_ALL_SOURCES, default=config.get("sources", FETCH_ALL_SOURCES),
+                              format_func=lambda k: SOURCES[k]["label"], key="fetchsched_sources")
+    products = st.multiselect("Products", FETCH_ALL_PRODUCTS, default=config.get("products", FETCH_ALL_PRODUCTS),
+                               key="fetchsched_products")
+
+    p1, p2 = st.columns(2)
+    with p1:
+        outdir = path_picker("fetchsched_outdir", config["outdir"], mode="dir", label="Output folder")
+    with p2:
+        report_fetch_config_path = path_picker(
+            "fetchsched_config", config["report_fetch_config_path"], mode="file",
+            file_extensions=(".json",), label="ck config file",
+        )
+    st.caption(
+        "Paths are resolved on whichever machine runs the schedule - Browse walks that "
+        "machine's own filesystem. Set ck for each source on the Fetch Daily Reports page first."
+    )
+
+    if st.button("Save schedule", type="primary", key="fetchsched_save"):
+        new_config = {
+            "recurrence": recurrence,
+            "interval": int(interval),
+            "weekdays": weekdays,
+            "day_of_month": int(day_of_month),
+            "month": month,
+            "time": run_time.strftime("%H:%M"),
+            "start_date": start_date.isoformat(),
+            "end_date": end_date.isoformat() if end_date else None,
+            "days_ago": int(days_ago),
+            "outdir": outdir,
+            "report_fetch_config_path": report_fetch_config_path,
+            "sources": sources,
+            "products": products,
+        }
+        errors = validate_fetch_schedule_config(new_config)
+        for e in errors:
+            st.error(e)
+        if not errors:
+            save_fetch_schedule_config(new_config)
+            bat_path = write_fetch_register_bat(new_config)
+            st.success(f"Saved. Registration script refreshed at {bat_path.name}.")
+            st.rerun()
+
+    if not FETCH_SCHEDULE_CONFIG_PATH.exists():
+        st.info("No report fetch schedule saved yet.")
+        return
+
+    config = load_fetch_schedule_config()
+    st.divider()
+    st.subheader("Current schedule")
+    st.write(summarize_fetch_schedule(config))
+    st.caption(f"Output: `{config['outdir']}/`  ·  Sources: {', '.join(config['sources'])}  ·  "
+               f"Products: {', '.join(config['products'])}")
+
+    for w in fetch_schedule_warnings(config):
+        st.warning(w)
+
+    st.subheader("Activate it")
+    st.caption(
+        f"Run **{REGISTER_FETCH_BAT_PATH.name}** as Administrator on the Windows machine "
+        "that should host this schedule - same manual-approval step as the other "
+        "register_*.bat scripts. Re-running it after editing the schedule above "
+        "overwrites the existing task (`/F`)."
+    )
+    try:
+        st.code(format_fetch_schtasks_command(config), language="bat")
+    except ValueError as e:
+        st.error(str(e))
+
+    if REGISTER_FETCH_BAT_PATH.exists():
+        st.download_button(
+            f"Download {REGISTER_FETCH_BAT_PATH.name}",
+            REGISTER_FETCH_BAT_PATH.read_bytes(),
+            file_name=REGISTER_FETCH_BAT_PATH.name,
+            mime="text/plain",
+        )
+
+    st.caption("Once registered, manage the task directly with schtasks:")
+    st.code(
+        f'schtasks /Query  /TN "{FETCH_TASK_NAME}" /FO LIST /V\n'
+        f'schtasks /Run    /TN "{FETCH_TASK_NAME}"\n'
+        f'schtasks /Delete /TN "{FETCH_TASK_NAME}" /F',
+        language="bat",
+    )
+
+    if st.button("Delete saved schedule", key="fetchsched_delete"):
+        delete_fetch_schedule_config()
+        st.success("Schedule config deleted. This does not remove an already-registered "
+                    "Windows task - use schtasks /Delete, shown above, for that.")
+        st.rerun()
+
+
+# ---------------------------------------------------------------------------
 # Page renderers
 # ---------------------------------------------------------------------------
 
@@ -925,6 +1187,10 @@ def main() -> None:
         render_sql_import_page()
     elif info["kind"] == "sql_schedule":
         render_sql_schedule_page()
+    elif info["kind"] == "report_fetch":
+        render_report_fetch_page()
+    elif info["kind"] == "report_fetch_schedule":
+        render_report_fetch_schedule_page()
     else:
         render_config_page()
 
