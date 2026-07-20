@@ -56,6 +56,7 @@ REGISTER_FETCH_BAT_PATH = PROJECT_DIR / "register_scheduled_report_fetch_task.ba
 REPORT_FETCH_SCRIPT = PROJECT_DIR / "report_fetch.py"
 
 TASK_NAME = "KEDP_ScheduledReportFetch"
+RUN_FETCH_BAT_PATH = PROJECT_DIR / "run_scheduled_report_fetch.bat"
 
 ALL_SOURCES = list(SOURCES.keys())
 ALL_PRODUCTS = ["flight", "train", "hotel"]
@@ -153,21 +154,35 @@ def fetch_schedule_warnings(config: dict) -> list[str]:
     return warnings
 
 
-def _fetch_schtasks_flag_lines(config: dict, python_exe: str, report_fetch_script: str,
+def _fetch_command_args(config: dict) -> str:
+    """The report_fetch.py flag/value portion of the command (everything
+    after the script path), double-quoted per argument. Shared by the
+    read-only display command and the line written into
+    run_scheduled_report_fetch.bat - never inlined into a schtasks /TR
+    value directly (see _fetch_schtasks_flag_lines for why)."""
+    extra = "".join(f' --source "{s}"' for s in config["sources"])
+    extra += "".join(f' --product "{p}"' for p in config["products"])
+    return (f'--days-ago "{config["days_ago"]}" '
+            f'--outdir "{config["outdir"]}" '
+            f'--config "{config["report_fetch_config_path"]}" '
+            f'--max-retries "{config.get("max_retries", DEFAULT_MAX_RETRIES)}" '
+            f'--retry-delay "{config.get("retry_delay", DEFAULT_RETRY_DELAY_SECONDS)}"{extra}')
+
+
+def _fetch_schtasks_flag_lines(config: dict, runner_bat_path: str,
                                 task_name: str = TASK_NAME) -> list[str]:
+    """runner_bat_path is the *only* thing in /TR - Windows caps /TR at 261
+    characters, and the actual report_fetch.py invocation (python path +
+    script path + up to 11 quoted --flag "value" pairs once every source
+    and product is selected) blows past that easily. Instead the full
+    command is written into a short, fixed-path wrapper script
+    (run_scheduled_report_fetch.bat - see render_fetch_register_bat) and
+    /TR just points schtasks at that."""
     errors = validate_fetch_schedule_config(config)
     if errors:
         raise ValueError("invalid fetch schedule config: " + "; ".join(errors))
 
-    extra = "".join(f' \\"--source\\" \\"{s}\\"' for s in config["sources"])
-    extra += "".join(f' \\"--product\\" \\"{p}\\"' for p in config["products"])
-    tr_value = (f'"\\"{python_exe}\\" \\"{report_fetch_script}\\" '
-                f'\\"--days-ago\\" \\"{config["days_ago"]}\\" '
-                f'\\"--outdir\\" \\"{config["outdir"]}\\" '
-                f'\\"--config\\" \\"{config["report_fetch_config_path"]}\\" '
-                f'\\"--max-retries\\" \\"{config.get("max_retries", DEFAULT_MAX_RETRIES)}\\" '
-                f'\\"--retry-delay\\" \\"{config.get("retry_delay", DEFAULT_RETRY_DELAY_SECONDS)}\\"{extra}"')
-
+    tr_value = f'"\\"{runner_bat_path}\\""'
     lines = [f'/TN "{task_name}"', f"/TR {tr_value}"]
     lines += _recurrence_flag_lines(config)
     lines += [f'/ST {config["time"]}', f'/SD {_mmddyyyy(config["start_date"])}']
@@ -180,9 +195,15 @@ def _fetch_schtasks_flag_lines(config: dict, python_exe: str, report_fetch_scrip
 def format_fetch_schtasks_command(config: dict, python_exe: str = "python",
                                    report_fetch_script: Path = REPORT_FETCH_SCRIPT,
                                    task_name: str = TASK_NAME) -> str:
-    """Single-line schtasks /Create command, for read-only display in the UI."""
-    lines = _fetch_schtasks_flag_lines(config, python_exe, str(report_fetch_script), task_name)
-    return "schtasks /Create " + " ".join(lines)
+    """Read-only display for the UI: the report_fetch.py invocation that
+    run_scheduled_report_fetch.bat will run, followed by the schtasks
+    /Create line that actually gets registered (which points /TR at that
+    wrapper script, not at this invocation directly - see
+    _fetch_schtasks_flag_lines)."""
+    runner_bat_path = str(RUN_FETCH_BAT_PATH)
+    command = f'"{python_exe}" "{report_fetch_script}" {_fetch_command_args(config)}'
+    lines = _fetch_schtasks_flag_lines(config, runner_bat_path, task_name)
+    return f"{runner_bat_path} runs:\n  {command}\n\nschtasks /Create " + " ".join(lines)
 
 
 def summarize_fetch_schedule(config: dict) -> str:
@@ -208,9 +229,10 @@ def summarize_fetch_schedule(config: dict) -> str:
 # ---------------------------------------------------------------------------
 
 def render_fetch_register_bat(config: dict, task_name: str = TASK_NAME) -> str:
-    schtasks_lines = _fetch_schtasks_flag_lines(config, "%PYTHON%", "%REPORTFETCH%", "%TASK_NAME%")
+    schtasks_lines = _fetch_schtasks_flag_lines(config, "%RUNNER%", "%TASK_NAME%")
     schtasks_block = "schtasks /Create ^\n    " + " ^\n    ".join(schtasks_lines)
     summary = summarize_fetch_schedule(config)
+    command_args = _fetch_command_args(config)
     env_var_lines = "\n".join(
         f"echo        {cs_env_var(key)}  ({SOURCES[key]['label']})"
         for key in config["sources"] if key in SOURCES
@@ -282,6 +304,17 @@ if /i not "%CONFIRM%"=="Y" (
     exit /b 0
 )
 
+:: -- Write the runner script -----------------------------------------
+:: schtasks caps /TR at 261 characters; the full report_fetch.py command
+:: (python path + script path + one --source/--product flag per selection)
+:: can exceed that, so /TR points at this short, fixed-path wrapper instead
+:: of embedding the command directly.
+set "RUNNER={RUN_FETCH_BAT_PATH}"
+(
+echo @echo off
+echo "%PYTHON%" "%REPORTFETCH%" {command_args}
+) > "%RUNNER%"
+
 :: -- Register Task Scheduler job ------------------------------------
 set "TASK_NAME={task_name}"
 
@@ -298,6 +331,7 @@ if %errorlevel% neq 0 (
 echo.
 echo [OK] Task "%TASK_NAME%" registered.
 echo      Trigger : {summary}
+echo      Runner  : %RUNNER%
 echo      Script  : %REPORTFETCH%
 echo      Python  : %PYTHON%
 echo      Outdir  : {config['outdir']}
@@ -326,4 +360,5 @@ __all__ = [
     "delete_fetch_schedule_config", "validate_fetch_schedule_config", "fetch_schedule_warnings",
     "format_fetch_schtasks_command", "summarize_fetch_schedule", "render_fetch_register_bat",
     "write_fetch_register_bat", "REGISTER_FETCH_BAT_PATH", "FETCH_SCHEDULE_CONFIG_PATH",
+    "RUN_FETCH_BAT_PATH",
 ]

@@ -16,4 +16,5 @@ register_scheduled_sql_import_task.bat
 report_fetch_config.json
 report_fetch_schedule_config.json
 register_scheduled_report_fetch_task.bat
+run_scheduled_report_fetch.bat
 report_fetch_secrets.txt
