@@ -128,6 +128,7 @@ Any of the 4 output workbooks can optionally be loaded into a SQL Server table a
 - **`cobt.id` (no "www")** 301-redirects to `www.cobt.id` and the redirect drops the `Authorization` header, so `cobt_mt`'s base URL points straight at `www.cobt.id` to skip that hop.
 - Each of the 9 source/product endpoints is fetched independently — one failing (bad creds, network blip) doesn't abort the rest of the batch; `fetch_all()` returns a per-endpoint status list instead of raising.
 - Uses `certifi`'s CA bundle explicitly rather than trusting the OS/venv Python to have one configured (a python.org macOS install without `Install Certificates.command` run, or a bare Windows install, will otherwise fail every request with `CERTIFICATE_VERIFY_FAILED`).
+- **Logging**: every run (CLI or scheduled) logs to console and, by default, to a rotating `report_fetch.log` next to the script (5 MB x 3 backups, gitignored via `*.log`) — `setup_logging()`, `--log-file` to override, empty string for console-only. This exists because a headless `schtasks`-launched run has no console for anything to land in; without a file, a silently-failing scheduled fetch (bad `cs`, network block, moved script) leaves no trace to check afterward. Unhandled exceptions are also logged before re-raising (`if __name__ == "__main__"` wraps `main()`).
 
 ## Kafka specifics (KEDP ingest only — unrelated to the transform stage)
 

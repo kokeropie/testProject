@@ -46,9 +46,11 @@ import logging
 import os
 import shutil
 import ssl
+import sys
 import time
 import zipfile
 from datetime import date, timedelta
+from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -60,6 +62,7 @@ PROJECT_DIR = Path(__file__).parent
 REPORT_FETCH_CONFIG_PATH = PROJECT_DIR / "report_fetch_config.json"
 REPORT_FETCH_SECRETS_PATH = PROJECT_DIR / "report_fetch_secrets.txt"
 FILENAME_REPLACE_MAP_PATH = PROJECT_DIR / "dataFilter" / "fileNameReplace.xlsx"
+REPORT_FETCH_LOG_PATH = PROJECT_DIR / "report_fetch.log"
 DEFAULT_KEEP_ORIGINALS = 7
 
 # Explicit CA bundle rather than trusting the OS/venv Python to have one
@@ -70,6 +73,21 @@ DEFAULT_KEEP_ORIGINALS = 7
 _SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
 
 log = logging.getLogger("report_fetch")
+
+
+def setup_logging(log_file: Path | None = REPORT_FETCH_LOG_PATH) -> None:
+    """Console + rotating file logging, so a headless scheduled run (no
+    console attached, nothing captured by Task Scheduler by default) still
+    leaves a record of what happened. Mirrors utils.py's setup_logging()
+    for the KEDP ingest pipeline, but self-contained - this pipeline shares
+    nothing with that one but Python + this checkout."""
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+    handlers: list[logging.Handler] = [logging.StreamHandler(sys.stdout)]
+    if log_file is not None:
+        handlers.append(RotatingFileHandler(log_file, maxBytes=5_242_880, backupCount=3, encoding="utf-8"))
+    for handler in handlers:
+        handler.setFormatter(formatter)
+    logging.basicConfig(level=logging.INFO, handlers=handlers)
 
 SOURCES: dict[str, dict] = {
     "katrina": {"label": "KATRINA", "base_url": "https://www.katrina.id",
@@ -448,9 +466,12 @@ def main() -> None:
                               f"are never retried. 0 disables batch-level retry.")
     parser.add_argument("--retry-delay", type=int, default=DEFAULT_RETRY_DELAY_SECONDS,
                          help=f"Seconds to wait between retry passes (default {DEFAULT_RETRY_DELAY_SECONDS}).")
+    parser.add_argument("--log-file", type=Path, default=REPORT_FETCH_LOG_PATH,
+                         help=f"Rotating log file (default {REPORT_FETCH_LOG_PATH}). Pass an empty "
+                              f"string to log to console only.")
     args = parser.parse_args()
 
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    setup_logging(args.log_file if str(args.log_file) else None)
 
     date_str = args.date or (date.today() - timedelta(days=args.days_ago)).isoformat()
     config = {**default_report_fetch_config(), **json.loads(args.config.read_text())} if args.config.exists() else default_report_fetch_config()
@@ -481,4 +502,10 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except SystemExit:
+        raise
+    except Exception:
+        log.exception("unhandled error")
+        raise
